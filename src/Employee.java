@@ -7,4 +7,16 @@ public class Employee extends User {
 
     // getters, setters, constructors go here
 
+    public Employee(boolean isManager) {
+        this.isManager = isManager;
+    }
+
+    public boolean isManager() {
+        return isManager;
+    }
+
+    public void setManager(boolean isManager) {
+        this.isManager = isManager;
+    }
+
 }

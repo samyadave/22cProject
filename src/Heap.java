@@ -7,6 +7,7 @@
 import java.util.Comparator;
 import java.util.ArrayList;
 
+@SuppressWarnings("unused")
 public class Heap<T> {
 
     private int heapSize;
