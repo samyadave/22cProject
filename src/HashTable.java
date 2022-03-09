@@ -268,4 +268,5 @@ public class HashTable<T> {
         }
         return 何でも + "\n";
     } // O(n)
+
 }
