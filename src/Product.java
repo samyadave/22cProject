@@ -11,14 +11,14 @@ public class Product {
     private String description;
     private int numInStock;
 
-    BST<Product> items = new BST<>();
-
+    private static BST<Product> itemsName = new BST<>();
+	private static BST<Product> itemsType = new BST<>();
     /**
      * populate the store with products from Catalogue
      * @param input Scanner
      * @throws IOException
      */
-    public void populateCatalogue(Scanner input) throws IOException {
+    public static void populateCatalogue(Scanner input) throws IOException {
 		String name = "";
         String type = "";
         int calories = 0;
@@ -33,8 +33,10 @@ public class Product {
 			type = input.nextLine();
 			calories = input.nextInt();
 			bestby = input.nextLine();
+			input.nextLine();
 			price = input.nextDouble();
             description = input.nextLine();
+            input.nextLine();
 			numInStock = input.nextInt();
 
 			if (input.hasNextLine()) {
@@ -43,9 +45,9 @@ public class Product {
 			}
 
             Product p = new Product(name, type, calories, bestby, price, description, numInStock);
-			items.insert(p);
-
-            //why two BSTS
+			itemsName.insert(p, new nameComparator());
+			System.out.println("inserting");
+			itemsType.insert(p, new typeComparator());
 
 		}
 
@@ -162,14 +164,7 @@ public class Product {
 		return numInStock;
 	}
 
-	/*
-	 * returns the BST of products
-     * //ask the ppl
-	 */
-	public BST<Product> getBST() {
-		return items;
-	}
-
+	
 
 	/**
 	 * Updates numInStock variable by a specified amount
@@ -197,6 +192,21 @@ public class Product {
 			return this.getName().equalsIgnoreCase(p.getName()) && getType() == (p.getType());
 		}
 	}
+	/**
+	 * Displays all products stored in the BST 
+	 * sorted by primary key name
+	 */
+	public static void displaybyName() {
+		System.out.println("Products sorted by Name: " + itemsName.inOrderString());
+	}
+
+	/**
+	 * Displays all products stored in the BST 
+	 * sorted by secondary key type
+	 */
+	public static void displaybyType() {
+		System.out.println("Products sorted by Type: " + itemsType.inOrderString());
+	}
 
 	/**
 	 * Creates a Product String in the following format
@@ -210,13 +220,13 @@ public class Product {
 	@Override
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("$0.00");
-		return "Name: " + this.getName() 
+		return "\nName: " + this.getName() 
             + "\nType: " + type 
             + "\nCalories: " + calories 
             + "\nBest By Date: " + bestby 
             + "\nPrice: " + df.format(getPrice()) 
             + "\nDescription: " + description
-            + "\nNum in Stock: " + getNumInStock();
+            + "\nNum in Stock: " + getNumInStock() + "\n";
 
 	}
 

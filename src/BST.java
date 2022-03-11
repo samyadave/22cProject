@@ -10,6 +10,9 @@
  */
 
 import java.util.NoSuchElementException;
+
+import org.w3c.dom.traversal.NodeFilter;
+
 import java.util.Comparator;
 
 public class BST<T> {
@@ -65,7 +68,7 @@ public class BST<T> {
         if (node == null) {
             return;
         } else {
-            insert(node.data);
+            insert(node.data, comparator);
             copyHelper(node.left);
             copyHelper(node.right);
         }
@@ -229,11 +232,11 @@ public class BST<T> {
      * 
      * @param data the data to insert
      */
-    public void insert(T data) {
+    public void insert(T data, Comparator<T> comparator) {
         if (root == null) {
             root = new Node(data);
         } else {
-            insert(data, root);
+            insert(data, root, comparator);
         }
     }
 
@@ -247,18 +250,17 @@ public class BST<T> {
      *             in which to insert
      */
     private void insert(T data, Node node, Comparator<T> comparator) { // UPDATE
-        // sortbyName n = new sortbyName<>();
-        if (data.comparator.compare(node.data) <= 0) {
+        if (comparator.compare(data, node.data) <= 0) {
             if (node.left == null) {
                 node.left = new Node(data);
             } else {
-                insert(data, node.left);
+                insert(data, node.left, comparator);
             }
         } else {
             if (node.right == null) {
                 node.right = new Node(data);
             } else {
-                insert(data, node.right);
+                insert(data, node.right, comparator);
             }
         }
     }
@@ -274,7 +276,7 @@ public class BST<T> {
         if (isEmpty()) {
             throw new IllegalStateException("remove(): Cannot remove from an empty binary tree.");
         }
-        root = remove(data, root);
+        root = remove(data, root, comparator);
     }
 
     /**
@@ -284,13 +286,13 @@ public class BST<T> {
      * @param node the current node
      * @return an updated reference variable
      */
-    private Node remove(T data, Node node) { // UPDATE
+    private Node remove(T data, Node node, Comparator<T> comparator) { // UPDATE
         if (node == null) {
             return node;
-        } else if (data.compareTo(node.data) < 0) {
-            node.left = remove(data, node.left);
-        } else if (data.compareTo(node.data) > 0) {
-            node.right = remove(data, node.right);
+        } else if (comparator.compare(data, node.data) < 0) {
+            node.left = remove(data, node.left, comparator);
+        } else if (comparator.compare(data, node.data) > 0) {
+            node.right = remove(data, node.right, comparator);
         } else {
             if (node.right == null && node.left == null) {
                 node = null;
@@ -301,7 +303,7 @@ public class BST<T> {
             } else {
                 T min = findMin(node.right);
                 node.data = min;
-                node.right = remove(min, node.right);
+                node.right = remove(min, node.right, comparator);
             }
         }
         return node;
@@ -317,11 +319,11 @@ public class BST<T> {
      * @return whether the value is stored
      *         in the tree
      */
-    public boolean search(T data) {
+    public T search(T data) {
         if (root == null) {
-            return false;
+            return null;
         } else {
-            return search(data, root);
+            return search(data, root, comparator);
         }
     }
 
@@ -333,20 +335,21 @@ public class BST<T> {
      * @return whether the data is stored
      *         in the tree
      */
-    private boolean search(T data, Node node) { // UPDATE
-        if (data.compareTo(node.data) == 0) {
-            return true;
-        } else if (data.compareTo(node.data) < 0) {
+ 
+    private T search(T data, Node node, Comparator<T> comparator) { 
+        if (comparator.compare(data, node.data) == 0) {
+            return data;
+        } else if (comparator.compare(data, node.data) < 0) {
             if (node.left == null) {
-                return false;
+               return null;
             } else {
-                return search(data, node.left);
+                return search(data, node.left, comparator);
             }
         } else {
             if (node.right == null) {
-                return false;
+                return null;
             } else {
-                return search(data, node.right);
+                return search(data, node.right, comparator);
             }
         }
     }
@@ -482,12 +485,12 @@ public class BST<T> {
      * @throws IllegalArgumentException when the array is
      *                                  unsorted
      */
-    public BST(T[] array) throws IllegalArgumentException {
+    public BST(T[] array, Comparator<T> comparator) throws IllegalArgumentException {
         if (array == null) {
             return;
         }
         for (int i = 0; i < array.length - 1; i++) {
-            if (array[i].compareTo(array[i + 1]) >= 0) {
+            if (comparator.compare(array[i], array[i + 1]) >= 0) {
                 throw new IllegalArgumentException("BST Array: Array is unsorted.");
             }
         }
@@ -495,25 +498,25 @@ public class BST<T> {
         int high = array.length - 1;
         int mid = array.length / 2;
         // create a pyramid structure
-        insert(array[mid]); // root
+        insert(array[mid], comparator); // root 
         int midleft = mid / 2;
-        insert(array[midleft]);
+        insert(array[midleft], comparator);
         while (low < mid) {
-            if (array[low].compareTo(array[midleft]) == 0) {
+            if (comparator.compare(array[low], array[midleft]) == 0) {
                 low++;
             } else {
-                insert(array[low]);
+                insert(array[low], comparator);
                 low++;
             }
         }
         int midright = (high + mid + 1) / 2;
-        insert(array[midright]);
+        insert(array[midright], comparator);
         mid = mid + 1;
         while (mid <= high) {
-            if (array[mid].compareTo(array[midright]) == 0) {
+            if (comparator.compare(array[mid], array[midright]) == 0) {
                 mid++;
             } else {
-                insert(array[mid]);
+                insert(array[mid], comparator);
                 mid++;
             }
         }
@@ -521,7 +524,7 @@ public class BST<T> {
 
 }
 
-class sortbyName implements Comparator<Product> {
+class nameComparator implements Comparator<Product> {
     /**
      * Compares the primary keys (name) of two Product objects
      * @param p1 first product to compare
@@ -537,7 +540,7 @@ class sortbyName implements Comparator<Product> {
     }
 }
 
-class sortbyType implements Comparator<Product> {
+class typeComparator implements Comparator<Product> {
     /**
      * Compares the secondary keys (type) of two Product objects
      * 
