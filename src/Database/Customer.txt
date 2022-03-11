@@ -1,0 +1,16 @@
+Man
+Guy
+manguy1
+password
+1111 2nd St
+DaBigCity
+DaSmallState
+12345
+firstName
+lastName
+login
+password
+address
+city
+state
+zip

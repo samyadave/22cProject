@@ -1,32 +1,35 @@
+package ProductUtil;
+
 import java.text.DecimalFormat;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class Product {
-    private String name;
-    private String type;
-    private int calories;
-    private String bestby;
-    private double price;
-    private String description;
-    private int numInStock;
+	private String name;
+	private String type;
+	private int calories;
+	private String bestby;
+	private double price;
+	private String description;
+	private int numInStock;
 
-    private static BST<Product> itemsName = new BST<>();
+	private static BST<Product> itemsName = new BST<>();
 	private static BST<Product> itemsType = new BST<>();
-    /**
-     * populate the store with products from Catalogue
-     * @param input Scanner
-     * @throws IOException
-     */
-    public static void populateCatalogue(Scanner input) throws IOException {
+
+	/**
+	 * populate the store with products from Catalogue
+	 * 
+	 * @param input Scanner
+	 * @throws IOException
+	 */
+	public static void populateCatalogue(Scanner input) throws IOException {
 		String name = "";
-        String type = "";
-        int calories = 0;
-        String bestby = "";
-        double price = 0.0;
-        String description = "";
-        int numInStock = 0;
-		
+		String type = "";
+		int calories = 0;
+		String bestby = "";
+		double price = 0.0;
+		String description = "";
+		int numInStock = 0;
 
 		while (input.hasNextLine()) {
 			name = input.nextLine();
@@ -35,8 +38,8 @@ public class Product {
 			bestby = input.nextLine();
 			input.nextLine();
 			price = input.nextDouble();
-            description = input.nextLine();
-            input.nextLine();
+			description = input.nextLine();
+			input.nextLine();
 			numInStock = input.nextInt();
 
 			if (input.hasNextLine()) {
@@ -44,7 +47,7 @@ public class Product {
 				input.nextLine();
 			}
 
-            Product p = new Product(name, type, calories, bestby, price, description, numInStock);
+			Product p = new Product(name, type, calories, bestby, price, description, numInStock);
 			itemsName.insert(p, new nameComparator());
 			System.out.println("inserting");
 			itemsType.insert(p, new typeComparator());
@@ -53,26 +56,26 @@ public class Product {
 
 	}// populateCatalogue()
 
-    /**
-	 * Default constructor for Product. Calls the 7 argument constructor 
-     * Sets name default to "name unknown" 
-     * Sets type default to "type unknown"
-     * Sets calories default to 0
-     * Sets bestby to "00/00/00"
-     * Sets price to 0.0 
-     * Sets description to "description unknown"
-     * Sets numInStock to 0
+	/**
+	 * Default constructor for Product. Calls the 7 argument constructor
+	 * Sets name default to "name unknown"
+	 * Sets type default to "type unknown"
+	 * Sets calories default to 0
+	 * Sets bestby to "00/00/00"
+	 * Sets price to 0.0
+	 * Sets description to "description unknown"
+	 * Sets numInStock to 0
 	 */
 	public Product() {
 		this("name unknown", "type unknown", 0, "00/00/00", 0.0, "description unknown", 0);
 	}
 
 	/**
-	 * Two argument constructor for the Product class. 
-     * Calls the 7 argument constructor
+	 * Two argument constructor for the Product class.
+	 * Calls the 7 argument constructor
 	 * 
-	 * @param name  name of product
-	 * @param type  type of product
+	 * @param name name of product
+	 * @param type type of product
 	 */
 	public Product(String name, String type) {
 		this(name, type, 0, "00/00/00", 0.0, "description unknown", 0);
@@ -81,23 +84,23 @@ public class Product {
 	/**
 	 * Constructor for Product
 	 * 
-	 * @param name       Sets name default to "name unknown" 
-     * @param type       Sets type default to "type unknown"
-     * @param calories   Sets calories default to 0
-     * @param bestby     Sets bestby to "00/00/00"
-     * @param price      Sets price to 0.0 
-     * @param description Sets description to "description unknown"
+	 * @param name        Sets name default to "name unknown"
+	 * @param type        Sets type default to "type unknown"
+	 * @param calories    Sets calories default to 0
+	 * @param bestby      Sets bestby to "00/00/00"
+	 * @param price       Sets price to 0.0
+	 * @param description Sets description to "description unknown"
 	 * @param numInStock  the current stock
 	 */
-	public Product(String name, String type, int calories, String bestby, double price, String description, int numInStock) {
+	public Product(String name, String type, int calories, String bestby, double price, String description,
+			int numInStock) {
 		this.name = name;
-        this.type = type;
-        this.calories = calories;
-        this.bestby = bestby;
-        this.price = price;
-        this.description = description;
-        this.numInStock = numInStock;
-		
+		this.type = type;
+		this.calories = calories;
+		this.bestby = bestby;
+		this.price = price;
+		this.description = description;
+		this.numInStock = numInStock;
 
 	}
 
@@ -128,32 +131,32 @@ public class Product {
 		return calories;
 	}
 
-    /**
+	/**
 	 * Returns the bestby date of the product
 	 * 
 	 * @return the bestby
 	 */
-    public String getBestBy() {
-        return bestby;
-    }
+	public String getBestBy() {
+		return bestby;
+	}
 
-    /**
+	/**
 	 * Returns the price of the product
 	 * 
 	 * @return the price
 	 */
-    public double getPrice() {
-        return price;
-    }
+	public double getPrice() {
+		return price;
+	}
 
-    /**
+	/**
 	 * Returns the description of the product
 	 * 
 	 * @return the description
 	 */
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
 	/**
 	 * Returns the total number of product
@@ -163,8 +166,6 @@ public class Product {
 	public int getNumInStock() {
 		return numInStock;
 	}
-
-	
 
 	/**
 	 * Updates numInStock variable by a specified amount
@@ -192,8 +193,9 @@ public class Product {
 			return this.getName().equalsIgnoreCase(p.getName()) && getType() == (p.getType());
 		}
 	}
+
 	/**
-	 * Displays all products stored in the BST 
+	 * Displays all products stored in the BST
 	 * sorted by primary key name
 	 */
 	public static void displaybyName() {
@@ -201,7 +203,7 @@ public class Product {
 	}
 
 	/**
-	 * Displays all products stored in the BST 
+	 * Displays all products stored in the BST
 	 * sorted by secondary key type
 	 */
 	public static void displaybyType() {
@@ -210,23 +212,23 @@ public class Product {
 
 	/**
 	 * Creates a Product String in the following format
-     * Name: <name> 
-     * Type: <year>
-	 * Calories: <calories> 
-     * Best By Date: <best by> 
-     * Price: $<price to two decimal places> 
-     * Num In Stock: <numInStock>
+	 * Name: <name>
+	 * Type: <year>
+	 * Calories: <calories>
+	 * Best By Date: <best by>
+	 * Price: $<price to two decimal places>
+	 * Num In Stock: <numInStock>
 	 */
 	@Override
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("$0.00");
-		return "\nName: " + this.getName() 
-            + "\nType: " + type 
-            + "\nCalories: " + calories 
-            + "\nBest By Date: " + bestby 
-            + "\nPrice: " + df.format(getPrice()) 
-            + "\nDescription: " + description
-            + "\nNum in Stock: " + getNumInStock() + "\n";
+		return "\nName: " + this.getName()
+				+ "\nType: " + type
+				+ "\nCalories: " + calories
+				+ "\nBest By Date: " + bestby
+				+ "\nPrice: " + df.format(getPrice())
+				+ "\nDescription: " + description
+				+ "\nNum in Stock: " + getNumInStock() + "\n";
 
 	}
 

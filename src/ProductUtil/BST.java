@@ -1,3 +1,4 @@
+package ProductUtil;
 
 /**
  * BST.java
@@ -335,13 +336,13 @@ public class BST<T> {
      * @return whether the data is stored
      *         in the tree
      */
- 
-    private T search(T data, Node node, Comparator<T> comparator) { 
+
+    private T search(T data, Node node, Comparator<T> comparator) {
         if (comparator.compare(data, node.data) == 0) {
             return data;
         } else if (comparator.compare(data, node.data) < 0) {
             if (node.left == null) {
-               return null;
+                return null;
             } else {
                 return search(data, node.left, comparator);
             }
@@ -498,7 +499,7 @@ public class BST<T> {
         int high = array.length - 1;
         int mid = array.length / 2;
         // create a pyramid structure
-        insert(array[mid], comparator); // root 
+        insert(array[mid], comparator); // root
         int midleft = mid / 2;
         insert(array[midleft], comparator);
         while (low < mid) {
@@ -527,16 +528,17 @@ public class BST<T> {
 class nameComparator implements Comparator<Product> {
     /**
      * Compares the primary keys (name) of two Product objects
+     * 
      * @param p1 first product to compare
      * @param p2 second prodcut to compare
      * @return an int based on if p1 is >, <, or = to p2
      */
     @Override
     public int compare(Product p1, Product p2) {
-        if(p1.equals(p2)) {
+        if (p1.equals(p2)) {
             return 0;
-        } 
-        return p1.getName().compareTo(p2.getName());     
+        }
+        return p1.getName().compareTo(p2.getName());
     }
 }
 
@@ -550,9 +552,9 @@ class typeComparator implements Comparator<Product> {
      */
     @Override
     public int compare(Product p1, Product p2) {
-        if(p1.equals(p2)) {
+        if (p1.equals(p2)) {
             return 0;
-        } 
+        }
         return p1.getType().compareTo(p2.getType());
     }
 }

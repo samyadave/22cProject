@@ -1,3 +1,5 @@
+package UserUtil;
+
 /**
  * MegaMart
  * User abstract Class - 22C Course Project
@@ -9,10 +11,19 @@ public abstract class User {
     protected String userName;
     protected String password;
 
-    public User(String firstName, String lastName, String login, String password) {
+    public User() {
+
+    }
+
+    public User(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+    }
+
+    public User(String firstName, String lastName, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userName = login;
+        this.userName = username;
         this.password = password;
     }
 
@@ -49,21 +60,15 @@ public abstract class User {
     }
 
     /**
-     * Authenticates credentials and returns the proper User object
-     * 
-     * @return the logged in User
+     * Hashcode based on username and password to
+     * allow access to same object with only
+     * correct username and password
      */
-    public static User login(String userName, String password) {
-        return null;
-    }
+    @Override
+    public int hashCode() {
+        final int prime = 31;
 
-    /**
-     * Helper method to check if credentials are valid
-     * 
-     * @return if credentials are valid
-     */
-    static boolean authenticateLogin(String userName, String password) {
-        return false;
+        return prime * userName.hashCode() + password.hashCode();
     }
 
 }

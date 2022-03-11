@@ -1,3 +1,4 @@
+package UserUtil;
 
 /**
 * HashTable.java
@@ -268,4 +269,25 @@ public class HashTable<T> {
         }
         return 何でも + "\n";
     } // O(n)
+
+    /**
+     * FINAL PROJECT ADDITIONS
+     * 
+     */
+
+    /**
+     * Get the full object from passing an object with hashcode properties
+     * 
+     * @precondition t != null
+     * @param t Object with only hashcode properties
+     * @return Full object with all details
+     * @throws NullPointerException if null passed
+     */
+    public T get(T t) throws NullPointerException {
+        if (t == null) {
+            throw new NullPointerException();
+        }
+
+        return this.Table.get(hash(t)).getFirst();
+    }
 }

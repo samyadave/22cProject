@@ -1,3 +1,4 @@
+package UserUtil;
 /*
  * Defines a doubly-linked list class
  * @author Sol Valdimarsdottir
