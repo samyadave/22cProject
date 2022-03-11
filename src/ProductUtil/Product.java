@@ -12,7 +12,6 @@ public class Product {
 	private double price;
 	private String description;
 	private int numInStock;
-
 	private static BST<Product> itemsName = new BST<>();
 	private static BST<Product> itemsType = new BST<>();
 
@@ -49,7 +48,6 @@ public class Product {
 
 			Product p = new Product(name, type, calories, bestby, price, description, numInStock);
 			itemsName.insert(p, new nameComparator());
-			System.out.println("inserting");
 			itemsType.insert(p, new typeComparator());
 
 		}

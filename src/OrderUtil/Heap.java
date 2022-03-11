@@ -24,7 +24,7 @@ public class Heap<T> {
      *             Calls buildHeap
      */
     public Heap(ArrayList<T> data, Comparator<T> comparator) {
-
+        data.sort(comparator);
     }
 
     /** Mutators */

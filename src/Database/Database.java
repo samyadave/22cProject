@@ -2,10 +2,14 @@ package Database;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
+import ProductUtil.BST.*;
+import ProductUtil.Product;
 import UserUtil.Customer;
 import UserUtil.Employee;
 import UserUtil.HashTable;
@@ -28,7 +32,8 @@ public abstract class Database {
      */
     public enum UserType {
         Customer,
-        Employee
+        Employee,
+        Manager
     }
 
     /**
@@ -203,6 +208,37 @@ public abstract class Database {
         } catch (IOException e) {
             // TODO
         }
+    }
+
+    public static void populateCatalogue() {
+        try {
+            Scanner input = new Scanner(new File(".\\src\\Database\\Catalogue.txt"));
+            Product.populateCatalogue(input);
+
+        } catch (IOException e) {
+            // TODO: handle exception
+        }
+    }
+
+    /**
+     * TODO
+     * 
+     * @param user
+     * @return
+     */
+    public static UserType getPosition(Object user) {
+        if (user instanceof Customer) {
+            return UserType.Customer;
+        } else if (user instanceof Employee) {
+            Employee e = (Employee) user;
+            if (e.isManager()) {
+                return UserType.Manager;
+            } else {
+                return UserType.Employee;
+            }
+        }
+
+        return null;
     }
 
 }
