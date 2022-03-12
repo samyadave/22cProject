@@ -1,6 +1,7 @@
 package ProductUtil;
 
 import java.text.DecimalFormat;
+import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -19,37 +20,42 @@ public class Product {
 	 * populate the store with products from Catalogue
 	 * 
 	 * @param input Scanner
-	 * @throws IOException
+	 * 
 	 */
-	public static void populateCatalogue(Scanner input) throws IOException {
-		String name = "";
-		String type = "";
-		int calories = 0;
-		String bestby = "";
-		double price = 0.0;
-		String description = "";
-		int numInStock = 0;
+	public static void populateCatalogue() {
+		try {
+			Scanner input = new Scanner(new File(".\\src\\Database\\Catalogue.txt"));
+			String name = "";
+			String type = "";
+			int calories = 0;
+			String bestby = "";
+			double price = 0.0;
+			String description = "";
+			int numInStock = 0;
 
-		while (input.hasNextLine()) {
-			name = input.nextLine();
-			type = input.nextLine();
-			calories = input.nextInt();
-			input.nextLine();
-			bestby = input.nextLine();
-			price = input.nextDouble();
-			input.nextLine();
-            description = input.nextLine();
-			numInStock = input.nextInt();
+			while (input.hasNextLine()) {
+				name = input.nextLine();
+				type = input.nextLine();
+				calories = input.nextInt();
+				input.nextLine();
+				bestby = input.nextLine();
+				price = input.nextDouble();
+				input.nextLine();
+				description = input.nextLine();
+				numInStock = input.nextInt();
 
-			if (input.hasNextLine()) {
-				input.nextLine();
-				input.nextLine();
+				if (input.hasNextLine()) {
+					input.nextLine();
+					input.nextLine();
+				}
+
+				Product p = new Product(name, type, calories, bestby, price, description, numInStock);
+				itemsName.insert(p, new nameComparator());
+				itemsType.insert(p, new typeComparator());
+
 			}
-
-			Product p = new Product(name, type, calories, bestby, price, description, numInStock);
-			itemsName.insert(p, new nameComparator());
-			itemsType.insert(p, new typeComparator());
-
+		} catch (IOException e) {
+			// TODO: handle exception
 		}
 
 	}// populateCatalogue()
@@ -111,7 +117,6 @@ public class Product {
 		return name;
 	}
 
-	
 	/**
 	 * Returns the product type
 	 * 
@@ -211,6 +216,7 @@ public class Product {
 
 	/**
 	 * Search for a product by primary key name
+	 * 
 	 * @param name of product to search
 	 * @return Product found or null
 	 */
@@ -221,6 +227,7 @@ public class Product {
 
 	/**
 	 * Search for a product by secondary key type
+	 * 
 	 * @param type the type of the product
 	 * @return the Product found or null
 	 */

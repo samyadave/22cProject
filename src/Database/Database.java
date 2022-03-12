@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-import ProductUtil.BST.*;
 import ProductUtil.Product;
 import UserUtil.Customer;
 import UserUtil.Employee;
@@ -118,6 +117,7 @@ public abstract class Database {
         switch (ut) {
             case Customer:
                 return Database.customerDatabase.get(new Customer(username, password));
+            case Manager:
             case Employee:
                 return Database.employeeDatabase.get(new Employee(username, password));
         }
@@ -210,35 +210,24 @@ public abstract class Database {
         }
     }
 
-    public static void populateCatalogue() {
-        try {
-            Scanner input = new Scanner(new File(".\\src\\Database\\Catalogue.txt"));
-            Product.populateCatalogue(input);
-
-        } catch (IOException e) {
-            // TODO: handle exception
-        }
-    }
-
     /**
-     * TODO
      * 
-     * @param user
-     * @return
+     * @return Type of account, if exists
      */
-    public static UserType getPosition(Object user) {
-        if (user instanceof Customer) {
+    public static UserType getPosition(String username, String password) {
+        if (!usernames.contains(username)) {
+            return null;
+        }
+        if (customerDatabase.contains(new Customer(username, password))) {
             return UserType.Customer;
-        } else if (user instanceof Employee) {
-            Employee e = (Employee) user;
-            if (e.isManager()) {
+        } else {
+            Employee emp = employeeDatabase.get(new Employee(username, password));
+            if (emp.isManager()) {
                 return UserType.Manager;
-            } else {
-                return UserType.Employee;
             }
+            return UserType.Employee;
         }
 
-        return null;
     }
 
 }
