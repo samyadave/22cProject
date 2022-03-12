@@ -29,28 +29,9 @@ public class MegaMart {
     private Product[] shoppingCart;
     private static final String products = "Catalogue.txt";
 
-    public void customerMenu() {
-        System.out.println("A. Search for Product" + "\nB. Display Database of Products" + "\nC. Place an Order"
-                + "\nD. View your Shopping Cart" + "\nE. View Order Status" + "\nX. Exit\n");
-
-    }
-
-    public void employeeMenu() {
-
-    }
-
-    public void managerMenu() {
-        employeeMenu();
-        System.out.print("/nE. Update Products Catalogue By Primary Key " + "\nX. Exit\n");
-
-    }
-
-    public void printReceipt() {
-
-    }
-
+  
     public static void main(String[] args) throws IOException {
-
+        MegaMart.onStart();
     }
 
     // public static void main(String[] args) {
@@ -68,5 +49,7 @@ public class MegaMart {
         // initialize databases
         Database.startUp();
         // populate products
+        UserInterface u = new UserInterface();
+        u.run();
     }
 }

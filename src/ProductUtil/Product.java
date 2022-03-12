@@ -34,11 +34,11 @@ public class Product {
 			name = input.nextLine();
 			type = input.nextLine();
 			calories = input.nextInt();
+			input.nextLine();
 			bestby = input.nextLine();
-			input.nextLine();
 			price = input.nextDouble();
-			description = input.nextLine();
 			input.nextLine();
+            description = input.nextLine();
 			numInStock = input.nextInt();
 
 			if (input.hasNextLine()) {
@@ -111,6 +111,7 @@ public class Product {
 		return name;
 	}
 
+	
 	/**
 	 * Returns the product type
 	 * 
@@ -206,6 +207,26 @@ public class Product {
 	 */
 	public static void displaybyType() {
 		System.out.println("Products sorted by Type: " + itemsType.inOrderString());
+	}
+
+	/**
+	 * Search for a product by primary key name
+	 * @param name of product to search
+	 * @return Product found or null
+	 */
+	public static Product searchName(String name) {
+		Product n = new Product(name, "");
+		return itemsName.search(n, new nameComparator());
+	}
+
+	/**
+	 * Search for a product by secondary key type
+	 * @param type the type of the product
+	 * @return the Product found or null
+	 */
+	public static Product searchType(String type) {
+		Product t = new Product("", type);
+		return itemsType.search(t, new nameComparator());
 	}
 
 	/**

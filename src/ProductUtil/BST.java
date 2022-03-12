@@ -12,8 +12,6 @@ package ProductUtil;
 
 import java.util.NoSuchElementException;
 
-import org.w3c.dom.traversal.NodeFilter;
-
 import java.util.Comparator;
 
 public class BST<T> {
@@ -44,9 +42,7 @@ public class BST<T> {
 
     /**
      * Copy constructor for BST
-     * 
-     * @param bst the BST to make
-     *            a copy of
+     * @param bst the BST to make a copy of
      */
     public BST(BST<T> bst) {
         if (bst == null) {
@@ -61,9 +57,7 @@ public class BST<T> {
 
     /**
      * Helper method for copy constructor
-     * 
-     * @param node the node containing
-     *             data to copy
+     * @param node the node containing data to copy
      */
     private void copyHelper(Node node) {
         if (node == null) {
@@ -83,11 +77,9 @@ public class BST<T> {
 
     /**
      * Returns the data stored in the root
-     * 
      * @precondition !isEmpty()
      * @return the data stored in the root
-     * @throws NoSuchElementException when
-     *                                precondition is violated
+     * @throws NoSuchElementException when precondition is violated
      */
     public T getRoot() throws NoSuchElementException {
         if (isEmpty()) {
@@ -98,7 +90,6 @@ public class BST<T> {
 
     /**
      * Determines whether the tree is empty
-     * 
      * @return whether the tree is empty
      */
     public boolean isEmpty() {
@@ -110,9 +101,7 @@ public class BST<T> {
     }
 
     /**
-     * Returns the current size of the
-     * tree (number of nodes)
-     * 
+     * Returns the current size of the tree (number of nodes)
      * @return the size of the tree
      */
     public int getSize() {
@@ -121,7 +110,6 @@ public class BST<T> {
 
     /**
      * Helper method for the getSize method
-     * 
      * @param node the current node to count
      * @return the size of the tree
      */
@@ -134,9 +122,7 @@ public class BST<T> {
     }
 
     /**
-     * Returns the height of tree by
-     * counting edges.
-     * 
+     * Returns the height of tree by counting edges.
      * @return the height of the tree
      */
     public int getHeight() {
@@ -145,9 +131,7 @@ public class BST<T> {
 
     /**
      * Helper method for getHeight method
-     * 
-     * @param node the current
-     *             node whose height to count
+     * @param node the current node whose height to count
      * @return the height of the tree
      */
     private int getHeight(Node node) {
@@ -166,11 +150,9 @@ public class BST<T> {
 
     /**
      * Returns the smallest value in the tree
-     * 
      * @precondition !isEmpty()
      * @return the smallest value in the tree
-     * @throws NoSuchElementException when the
-     *                                precondition is violated
+     * @throws NoSuchElementException when the precondition is violated
      */
     public T findMin() throws NoSuchElementException {
         if (isEmpty()) {
@@ -182,9 +164,7 @@ public class BST<T> {
 
     /**
      * Helper method to findMin method
-     * 
-     * @param node the current node to check
-     *             if it is the smallest
+     * @param node the current node to check if it is the smallest
      * @return the smallest value in the tree
      */
     private T findMin(Node node) {
@@ -197,11 +177,9 @@ public class BST<T> {
 
     /**
      * Returns the largest value in the tree
-     * 
      * @precondition !isEmpty()
      * @return the largest value in the tree
-     * @throws NoSuchElementException when the
-     *                                precondition is violated
+     * @throws NoSuchElementException when the precondition is violated
      */
     public T findMax() throws NoSuchElementException {
         if (isEmpty()) {
@@ -213,9 +191,7 @@ public class BST<T> {
 
     /**
      * Helper method to findMax method
-     * 
-     * @param node the current node to check
-     *             if it is the largest
+     * @param node the current node to check if it is the largest
      * @return the largest value in the tree
      */
     private T findMax(Node node) {
@@ -230,7 +206,6 @@ public class BST<T> {
 
     /**
      * Inserts a new node in the tree
-     * 
      * @param data the data to insert
      */
     public void insert(T data, Comparator<T> comparator) {
@@ -244,11 +219,8 @@ public class BST<T> {
     /**
      * Helper method to insert
      * Inserts a new value in the tree
-     * 
      * @param data the data to insert
-     * @param node the current node in the
-     *             search for the correct location
-     *             in which to insert
+     * @param node the current node in the search for the correct location in which to insert
      */
     private void insert(T data, Node node, Comparator<T> comparator) { // UPDATE
         if (comparator.compare(data, node.data) <= 0) {
@@ -268,7 +240,6 @@ public class BST<T> {
 
     /**
      * Removes a value from the BST
-     * 
      * @param data the value to remove
      * @precondition !isEmpty()
      * @throws IllegalStateException when BST is empty
@@ -282,7 +253,6 @@ public class BST<T> {
 
     /**
      * Helper method to the remove method
-     * 
      * @param data the data to remove
      * @param node the current node
      * @return an updated reference variable
@@ -313,14 +283,11 @@ public class BST<T> {
     /*** ADDITIONAL OPERATIONS ***/
 
     /**
-     * Searches for a specified value
-     * in the tree
-     * 
+     * Searches for a specified value in the tree
      * @param data the value to search for
-     * @return whether the value is stored
-     *         in the tree
+     * @return whether the value is stored in the tree
      */
-    public T search(T data) {
+    public T search(T data, Comparator<T> comparator) {
         if (root == null) {
             return null;
         } else {
@@ -361,7 +328,6 @@ public class BST<T> {
      * lesson notes
      * Note that we will consider an empty tree
      * to be trivially balanced
-     * 
      * @return whether the BST is balanced
      */
     public boolean isBalanced() {
@@ -374,10 +340,8 @@ public class BST<T> {
     /**
      * Helper method for isBalanced
      * to determine if a BST is balanced
-     * 
      * @param n a Node in the tree
-     * @return whether the BST is balanced
-     *         at the level of the given Node
+     * @return whether the BST is balanced at the level of the given Node
      */
     private boolean isBalanced(Node n) {
         if (n != null) {
@@ -390,9 +354,7 @@ public class BST<T> {
     }
 
     /**
-     * Returns a String containing the data
-     * in post order
-     * 
+     * Returns a String containing the data in post order
      * @return a String of data in post order
      */
     public String preOrderString() {
@@ -404,8 +366,7 @@ public class BST<T> {
     /**
      * Helper method to preOrderString
      * Inserts the data in pre order into a String
-     * 
-     * @param node     the current Node
+     * @param node the current Node
      * @param preOrder a String containing the data
      */
     private void preOrderString(Node node, StringBuilder preOrder) {
@@ -419,9 +380,7 @@ public class BST<T> {
     }
 
     /**
-     * Returns a String containing the data
-     * in order
-     * 
+     * Returns a String containing the data in order
      * @return a String of data in order
      */
     public String inOrderString() {
@@ -433,8 +392,7 @@ public class BST<T> {
     /**
      * Helper method to inOrderString
      * Inserts the data in order into a String
-     * 
-     * @param node    the current Node
+     * @param node the current Node
      * @param inOrder a String containing the data
      */
     private void inOrderString(Node node, StringBuilder inOrder) {
@@ -448,9 +406,7 @@ public class BST<T> {
     }
 
     /**
-     * Returns a String containing the data
-     * in post order
-     * 
+     * Returns a String containing the data in post order
      * @return a String of data in post order
      */
     public String postOrderString() {
@@ -462,8 +418,7 @@ public class BST<T> {
     /**
      * Helper method to postOrderString
      * Inserts the data in post order into a String
-     * 
-     * @param node      the current Node
+     * @param node the current Node
      * @param postOrder a String containing the data
      */
     private void postOrderString(Node node, StringBuilder postOrder) {
@@ -480,11 +435,9 @@ public class BST<T> {
 
     /**
      * Creates a BST of minimal height given an array of values
-     * 
      * @param array the list of values to insert
      * @precondition array must be sorted in ascending order
-     * @throws IllegalArgumentException when the array is
-     *                                  unsorted
+     * @throws IllegalArgumentException when the array is unsorted
      */
     public BST(T[] array, Comparator<T> comparator) throws IllegalArgumentException {
         if (array == null) {
