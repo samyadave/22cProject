@@ -5,6 +5,8 @@ package OrderUtil;
  * Final Project
  */
 
+//Maybe when ordering stuff we can keep track of when the person makes an order with the time import class
+
 import java.util.Comparator;
 import java.util.ArrayList;
 
@@ -13,6 +15,16 @@ public class Heap<T> {
 
     private int heapSize;
     private ArrayList<T> heap;
+
+    /**
+     * Priority is to be assigned according to the date and time of the order and
+     * the shipping speed selected by the customer
+     * Priority Shipping Greatest to Least: Overnight shipping, rush shipping,
+     * standard shipping
+     * 
+     * The arrayList<T>
+     * 
+     */
 
     /**
      * Constructors/
@@ -24,7 +36,7 @@ public class Heap<T> {
      *             Calls buildHeap
      */
     public Heap(ArrayList<T> data, Comparator<T> comparator) {
-        data.sort(comparator);
+
     }
 
     /** Mutators */
@@ -35,7 +47,9 @@ public class Heap<T> {
      * Calls helper method heapify
      */
     public void buildHeap(Comparator<T> comparator) {
-
+        for (int i = (heapSize / 2); i < 1; i--) {
+            heapify(i, comparator);
+        }
     }
 
     /**
@@ -45,17 +59,37 @@ public class Heap<T> {
      * @param index an index in the heap
      */
     private void heapify(int index, Comparator<T> comparator) throws IndexOutOfBoundsException {
+        int indexMax = getParent(index);
+        int left = get_left(index);
+        int right = get_right(index);
 
+        // compares element of left child to parent
+        if (comparator.compare(getElement(left), getElement(indexMax)) > 0) {
+            indexMax = left;
+        }
+        // compares element of right child to largest element
+        if (comparator.compare(getElement(right), getElement(indexMax)) > 0) {
+            indexMax = right;
+        }
+        // if parent is not largest value, swap with largest child
+        if (index != indexMax) {
+            T temp = getElement(index);
+            heap.set(index, getElement(indexMax));
+            heap.set(indexMax, temp);
+            heapify(index, comparator);
+        }
     }
 
     /**
      * Inserts the given data into heap
+     * When placing an order, it adds a new order to the heap
      * Calls helper method heapIncreaseKey
      * 
      * @param key the data to insert
      */
     public void insert(T key, Comparator<T> comparator) {
-
+        heapSize++;
+        heapIncreaseKey(heapSize, key, comparator);
     }
 
     /**
@@ -66,7 +100,17 @@ public class Heap<T> {
      * @precondition
      */
     private void heapIncreaseKey(int index, T key, Comparator<T> comparator) throws IndexOutOfBoundsException {
-
+        if (comparator.compare(key, heap.get(index)) > 0) {
+            T item = heap.get(index);
+            item = key;
+        }
+        while (index > 1 && comparator.compare(getElement(getParent(index)), heap.get(index)) < 0) {
+            T temp = heap.get(index);
+            // swap the heap at index to equal
+            heap.set(index, getElement(getParent(index)));
+            heap.set(getParent(index), temp);
+            index = getParent(index);
+        }
     }
 
     /**
@@ -76,6 +120,28 @@ public class Heap<T> {
      * @param index the index of the element to remove
      */
     public void remove(int index, Comparator<T> comparator) throws IndexOutOfBoundsException {
+        if (heapSize == 0 || index > heapSize || index < 0) {
+            throw new IndexOutOfBoundsException(
+                    "Heap remove(): Index is either out of bounds, or heap has no values to remove!");
+        }
+        // when removing something from a heap
+        heap.remove(index);
+        heapSize--;
+        heap.insert(index, heap.get(index).getLast());
+
+        /**
+         * 2. Replace the deletion node
+         * with the "fartest right node" on the lowest level
+         * of the Binary Tree
+         * (This step makes the tree into a "complete binary tree")
+         * 
+         * 3. Heapify (fix the heap):
+         * 
+         * if ( value in replacement node < its parent node )
+         * Filter the replacement node UP the binary tree
+         * else
+         * Filter the replacement node DOWN the binary tree
+         */
 
     }
 
@@ -87,16 +153,17 @@ public class Heap<T> {
      * @return the max value
      */
     public T getMax() {
-        return null;
+        return heap.get(1);
     }
 
     /**
      * returns the maximum element (highest priority)
+     * we search in the shopping cart,
      * 
-     * @return the max value
+     * @return the
      */
     public T search(T data, Comparator<T> comparator) {
-        return null;
+
     }
 
     /**
@@ -109,7 +176,10 @@ public class Heap<T> {
      * @throws IndexOutOfBoundsException
      */
     public int getParent(int index) throws IndexOutOfBoundsException {
-        return -1;
+        if (index >= heapSize || index <= 0) {
+            throw new IndexOutOfBoundsException("getParent(): Index is likely out of bounds!");
+        }
+        return index / 2;
     }
 
     /**
@@ -122,7 +192,10 @@ public class Heap<T> {
      * @throws IndexOutOfBoundsException
      */
     public int get_left(int index) throws IndexOutOfBoundsException {
-        return -1;
+        if (index >= heapSize || index <= 0) {
+            throw new IndexOutOfBoundsException("get_left(): Index is likely out of bounds!");
+        }
+        return index + index;
     }
 
     /**
@@ -135,7 +208,10 @@ public class Heap<T> {
      * @throws IndexOutOfBoundsException
      */
     public int get_right(int index) throws IndexOutOfBoundsException {
-        return -1;
+        if (index >= heapSize || index <= 0) {
+            throw new IndexOutOfBoundsException("get_right(): Index is likely out of bounds!");
+        }
+        return index + index + 1;
     }
 
     /**
@@ -155,7 +231,10 @@ public class Heap<T> {
      * @throws IndexOutOfBoundsException
      */
     public T getElement(int index) throws IndexOutOfBoundsException {
-        return null;
+        if (index < 0 || index >= heapSize) {
+            throw new IndexOutOfBoundsException("getElement: Index out of bounds!");
+        }
+        return heap.get(index);
     }
 
     /** Additional Operations */
@@ -165,7 +244,11 @@ public class Heap<T> {
      */
     @Override
     public String toString() {
-        return "";
+        String str = "";
+        for (int i = 0; i < heapSize; i++) {
+            str += getElement(i) + "\n";
+        }
+        return str;
     }
 
     /**
@@ -178,6 +261,42 @@ public class Heap<T> {
      */
     public ArrayList<T> sort(Comparator<T> comparator) {
         return new ArrayList<T>();
+    }
+
+    class shippingComparator implements Comparator<Order> {
+        /**
+         * Compares the shipping time of two Product objects,
+         * then compares the time of order of two Product objects
+         * 
+         * @param p1 first product to compare
+         * @param p2 second prodcut to compare
+         * @return an int based on if p1 is >, <, or = to p2
+         */
+        @Override
+        public int compare(Order p1, Order p2) {
+            if (p1.equals(p2)) {
+                return 0;
+            }
+            return Integer.compare(p1.getShippingSpeed(), (p2.getShippingSpeed()));
+        }
+    }
+
+    class dateComparator implements Comparator<Order> {
+        /**
+         * Compares the shipping time of two Product objects,
+         * then compares the time of order of two Product objects
+         * 
+         * @param p1 first product to compare
+         * @param p2 second prodcut to compare
+         * @return an int based on if p1 is >, <, or = to p2
+         */
+        @Override
+        public int compare(Order p1, Order p2) {
+            if (p1.equals(p2)) {
+                return 0;
+            }
+            return p1.getDate().compareTo(p2.getDate());
+        }
     }
 
 }
