@@ -244,7 +244,7 @@ public class BST<T> {
      * @precondition !isEmpty()
      * @throws IllegalStateException when BST is empty
      */
-    public void remove(T data) throws IllegalStateException {
+    public void remove(T data, Comparator<T> comparator) throws IllegalStateException {
         if (isEmpty()) {
             throw new IllegalStateException("remove(): Cannot remove from an empty binary tree.");
         }

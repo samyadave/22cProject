@@ -118,7 +118,7 @@ public class UserInterface {
                     System.out.println("Sorry! Requested product not found in database.");
                 }
             } else {
-                System.out.println("Invalid option."); // change to loop
+                System.out.println("Invalid option. Please try again!"); // change to loop
             }
         } else if (choice.equalsIgnoreCase("B")) {
             System.out.print("View database of products sorted by:\n\t1. By primary key name\n\t"
@@ -150,25 +150,115 @@ public class UserInterface {
      * @param choice
      */
     private void manager(String choice) {
-        String option = "";
-        if (choice == "E") {
+        String pname, ptype;
+        String option = "", description, bestby;
+        double price;
+        int stock, calories;
+        int search = 0;
+        Product p = new Product();
+        Product tfound, nfound;
+        if (choice.equalsIgnoreCase("E")) {
             System.out.println(
                     "\nA. Add New Product" + "\nB. Update an Existing Product Price, Description or Add More to Stock"
                             + "\nC. Remove a Product");
             System.out.print("\nPlease select from one of the options: ");
             option = input.next();
+            input.nextLine();
             // Meigan and Eileen's TODO
             if (option.equalsIgnoreCase("A")) {
+                System.out.print("Enter the name of the product: ");
+                pname = input.nextLine();
+                System.out.print("Enter the type of the product: ");
+                ptype = input.nextLine();
+                tfound = Product.searchType(ptype);
+                nfound = Product.searchName(pname);
+                if (tfound != null && nfound != null) {
+                    System.out.println("Updating the number of " + pname + " in stock!");
+                    System.out.print("Enter number of " + pname + " to add: ");
+                    stock = input.nextInt();
+                    nfound.updateNumInStock(stock);
+                    //TESTING PURPOSES REMOVE AFTER
+                    Product.displaybyName();
+                    Product.displaybyType();
+                } else {
+                    System.out.println("It looks like we don't have this item in our database...Let's add it in!");
+                    System.out.print("Enter total calories of " + pname + ": ");
+                    calories = input.nextInt();
+                    input.nextLine();
+                    System.out.print("Enter the best by date for " + pname + ": ");
+                    bestby = input.nextLine();
+                    System.out.print("Enter price of " + pname + ": $");
+                    price = input.nextDouble();
+                    input.nextLine();
+                    System.out.print("Enter your description for " + pname + ": ");
+                    description = input.nextLine();
+                    System.out.print("Enter the number of " + pname + " in stock: ");
+                    stock = input.nextInt();
+                    
+                    Product add =  new Product(pname, ptype, calories, bestby, price, description, stock);
+                    p.addProduct(add);
 
+                    //TESTING PURPOSES REMOVE AFTER
+                    Product.displaybyName();
+                    Product.displaybyType();
+                      
+                }
             } else if (option.equalsIgnoreCase("B")) {
-
+                System.out.println("Enter the name of the product: ");
+                pname = input.nextLine();
+                System.out.print("Enter the type of the product: ");
+                ptype = input.nextLine();
+                tfound = Product.searchName(pname);
+                nfound = Product.searchType(ptype);
+                if (tfound != null && nfound != null) {
+                    while(search != 4) {
+                    	System.out.print("Update an existing:\n\t1. Product Price"
+                    			+ "\n\t2. Product Description\n\t3. Number in Stock\n\t4. Exit");
+                    	System.out.print("\nPlease select from one of the options: ");
+                    	search = input.nextInt();
+                    	if (search == 1) {
+                    		System.out.print("Enter new price of " + pname + ": $");
+                    		price = input.nextDouble();
+                            nfound.setPrice(price);
+                    		System.out.println("Updating the price of " + pname + "!");
+                    	} else if (search == 2) {
+                    		input.nextLine();
+                    		System.out.print("Enter your new description for " + pname + ": ");
+                    		description = input.nextLine();
+                    		nfound.setDescription(description);
+                    		System.out.println("Updating the description for " + pname + "!");
+                    	} else if (search == 3) {
+                    		System.out.print("Enter the number of " + pname + " you want to add: ");
+                    		stock = input.nextInt();
+                    		nfound.updateNumInStock(stock);
+                    		System.out.println("Updating the number of " + pname + " in stock!");
+                    	}else if (search == 4) {
+                    		System.out.println("Exiting! Back to main menu!");
+                    	} else {
+                    		System.out.println("Invalid option. Please try again!"); 
+                    	}
+                    }
+                } else {
+                    System.out.println("Sorry! Requested product not found in database.");
+                }
             } else if (option.equalsIgnoreCase("C")) {
-
+                System.out.print("Enter the name of the product: ");
+                pname = input.nextLine();
+                tfound = Product.searchName(pname);
+                System.out.print("Enter the type of the product: ");
+                ptype = input.nextLine();
+                nfound = Product.searchType(ptype);
+                if (tfound != null && nfound != null) {
+                    p.removeProduct(tfound);
+                    System.out.println("Removing " + pname + " from the database!");
+                } else {
+                    System.out.println("Sorry! Requested product not found in database.");
+                }
             } else {
-                System.out.println("Invalid option!");
+                System.out.println("Invalid option. Please try again!"); 
             }
         } else {
-            System.out.println("\nInvalid option!");
+            System.out.println("\nInvalid option. Please try again!"); //loop(?)
         }
 
     }

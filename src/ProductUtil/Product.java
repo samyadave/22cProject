@@ -172,6 +172,24 @@ public class Product {
 	}
 
 	/**
+	 * Returns the price of the product
+	 * 
+	 * @return the price
+	 */
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	/**
+	 * Returns the description of the product
+	 * 
+	 * @return the description
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
 	 * Updates numInStock variable by a specified amount
 	 * 
 	 * @param n the number of products to add
@@ -202,7 +220,7 @@ public class Product {
 	 * Displays all products stored in the BST
 	 * sorted by primary key name
 	 */
-	public static void displaybyName() {
+	public static void displaybyName() { //move to database
 		System.out.println("Products sorted by Name: " + itemsName.inOrderString());
 	}
 
@@ -210,7 +228,7 @@ public class Product {
 	 * Displays all products stored in the BST
 	 * sorted by secondary key type
 	 */
-	public static void displaybyType() {
+	public static void displaybyType() { //move to database
 		System.out.println("Products sorted by Type: " + itemsType.inOrderString());
 	}
 
@@ -220,7 +238,7 @@ public class Product {
 	 * @param name of product to search
 	 * @return Product found or null
 	 */
-	public static Product searchName(String name) {
+	public static Product searchName(String name) { //move to database
 		Product n = new Product(name, "");
 		return itemsName.search(n, new nameComparator());
 	}
@@ -231,9 +249,27 @@ public class Product {
 	 * @param type the type of the product
 	 * @return the Product found or null
 	 */
-	public static Product searchType(String type) {
+	public static Product searchType(String type) { //move to database
 		Product t = new Product("", type);
-		return itemsType.search(t, new nameComparator());
+		return itemsType.search(t, new typeComparator());
+	}
+
+	/**
+	 *Add a new product to the BST
+	 * @param p Product to remove
+	 */
+	public void addProduct(Product p) {
+		itemsName.insert(p, new nameComparator());
+		itemsType.insert(p, new typeComparator());
+	}
+
+	/**
+	 * Removes a new product to the BST
+	 * @param p Product to add
+	 */
+	public void removeProduct(Product p) {
+		itemsName.remove(p, new nameComparator());
+		itemsType.remove(p, new typeComparator());
 	}
 
 	/**
