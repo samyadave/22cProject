@@ -27,7 +27,7 @@ public abstract class User {
         this.password = password;
     }
 
-    public String getFirstName() {
+    public final String getFirstName() {
         return firstName;
     }
 
@@ -69,6 +69,17 @@ public abstract class User {
         final int prime = 31;
 
         return prime * userName.hashCode() + password.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof User)) {
+            return false;
+        }
+
+        User u = (User) obj;
+
+        return userName.equals(u.userName);
     }
 
 }

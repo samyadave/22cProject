@@ -2,6 +2,7 @@
 import java.util.Scanner;
 
 import Database.Database;
+import Database.Database.Status;
 import Database.Database.UserType;
 import ProductUtil.Product;
 import UserUtil.Customer;
@@ -10,27 +11,24 @@ import UserUtil.Employee;
 public class UserInterface {
     private static Scanner input = new Scanner(System.in);
 
+    public UserInterface() {
+
+    }
+
     public void run() {
-        // Sam's TODO
-        // login ?
-        // sign up
-        // continue as guest
-        System.out.println("Welcome to MegaMart!");
-        System.out.print("Enter your username: ");
-        String username = input.next();
-        System.out.print("Enter your password: ");
-        String password = input.next();
-
-        UserType position = Database.getPosition(username, password);
-        switch (position) {
-            case Employee:
-                employeeMenu((Employee) Database.login(username, password, position));
+        System.out.printf("%s\n\t%s\n\t%s\n\t%s\n\t%s\n%s", "Welcome to MegaMart!", "Choose an option:", "1. Sign in",
+                "2. Sign up", "3. Continue as guest", "Enter choice: ");
+        int choice = input.nextInt();
+        switch (choice) {
+            case 1:
+                signIn();
                 break;
-            case Manager:
-            case Customer:
-                customerMenu((Customer) Database.login(username, password, position));
+            case 2:
+                signUp();
                 break;
-
+            case 3:
+                customerMenu(new Customer());
+                break;
         }
 
         printReceipt();
@@ -38,17 +36,86 @@ public class UserInterface {
 
     /**
      * 
+     */
+    public void signIn() {
+        System.out.print("Enter your email: ");
+        String username = input.next();
+        System.out.print("Enter your password: ");
+        String password = input.next();
+
+        Status t = Database.login(username, password);
+
+        if (t == Status.Success) {
+            UserType position = Database.getPosition(username, password);
+            System.out.println("Successfully logged in");
+            switch (position) {
+                case Customer:
+                    customerMenu((Customer) Database.loggedIn);
+                    break;
+                case Manager:
+                case Employee:
+                    employeeMenu((Employee) Database.loggedIn);
+                    break;
+            }
+        } else {
+            System.out.println("Unable to log in, returning to main menu");
+            run();
+        }
+
+    }
+
+    /**
+     * 
+     */
+    public void signUp() {
+        System.out.println("Enter your first name:");
+        String firstName = input.next();
+        System.out.println("Enter your last name:");
+        String lastName = input.next();
+        System.out.println("Enter your email:");
+        String email = input.next();
+        System.out.println("Enter your password:");
+        String password = input.next();
+        System.out.println("Enter your street address:");
+        String address = input.next();
+        System.out.println("Enter your city:");
+        String city = input.next();
+        System.out.println("Enter your state:");
+        String state = input.next();
+        System.out.println("Enter your ZIP code:");
+        String zip = input.next();
+        Status added = Database.addUser(new Customer(firstName, lastName, email, password, address, city, state, zip));
+        switch (added) {
+            case Success:
+                System.out.println("Successfully created an account and logged in!");
+                Database.login(email, password);
+                customerMenu((Customer) Database.loggedIn);
+                break;
+            case Error:
+            case Failed:
+                System.out.println("Account creation failed, returning to menu!");
+        }
+    }
+
+    /**
+     * 
      * @param cust
      */
-    public void customerMenu(Customer cust) {
+    public synchronized void customerMenu(Customer cust) {
         String choice = "";
-
+        System.out.printf("\nWelcome to MegaMart, %s!\n", cust.getFirstName());
+        try {
+            System.out.println("Loading...");
+            wait(1000);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
         while (!choice.equalsIgnoreCase("X")) {
             System.out.println("A. Search for Product" + "\nB. Display Database of Products" + "\nC. Place an Order"
-                    + "\nD. View your Shopping Cart" + "\nE. View Order Status" + "\nX. Exit\n");
+                    + "\nD. View your Shopping Cart" + "\nE. View Purchases" + "\nX. Exit\n");
             System.out.print("\nPlease select from one of the options: ");
             choice = input.next(); // taking in choices from menu
-            customer(choice);
+            customer(choice, cust);
         }
 
     }
@@ -60,8 +127,9 @@ public class UserInterface {
     public void employeeMenu(Employee emp) { // looks good
         String choice = "";
 
+        System.out.printf("Welcome, %s!", emp.getFirstName());
         while (!choice.equalsIgnoreCase("X")) {
-            System.out.printf("\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n\t%s\n", "A. Search for an order",
+            System.out.printf("\t%s\n\t%s\n\t%s\n\t%s", "A. Search for an order",
                     "B. View order with highest priority", "C. View all orders", "D. Ship order");
             if (emp.isManager()) {
                 System.out.println("\tE. Update Products Catalogue By Primary Key ");
@@ -91,7 +159,7 @@ public class UserInterface {
      * 
      * @param choice
      */
-    private void customer(String choice) {
+    private void customer(String choice, Customer cust) {
         String pname, ptype, search;
         int view;
         if (choice.equalsIgnoreCase("A")) {
@@ -138,8 +206,21 @@ public class UserInterface {
         } else if (choice.equalsIgnoreCase("D")) {
 
         } else if (choice.equalsIgnoreCase("E")) {
+            if (cust.getUnshippedOrders().getLength() == 0) {
+                System.out.println("No unshipped orders");
+            } else {
+                System.out.println("Unshipped orders:");
+                System.out.println(cust.getUnshippedOrders());
+            }
 
-        } else {
+            if (cust.getShippedOrders().getLength() == 0) {
+                System.out.println("No shipped orders");
+            } else {
+                System.out.println("Shipped orders:");
+                System.out.println(cust.getShippedOrders());
+            }
+
+        } else if (!choice.equalsIgnoreCase("X")) {
             System.out.println("\nInvalid option!"); // change to loop
         }
 

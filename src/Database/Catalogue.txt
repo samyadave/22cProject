@@ -1,0 +1,119 @@
+Banana
+Produce
+105
+5/02/21
+3.99
+A great source of potassium, sweet in personality
+50
+
+Spinach
+Produce
+23
+7/12/21
+1.29
+Not as advertised in Popeye's.
+50
+
+Watermelon
+Produce
+85
+5/01/21
+4.99
+An ideal fruit for all seasons in California.
+50
+
+Milk
+Dairy
+103
+11/01/22
+4.99
+Good for bones! Get em fast!
+20
+
+Cheddar Cheese
+Dairy
+113
+4/23/22
+5.99
+Cheddar omelette is superior to using mozzarella
+30
+
+Strawberry Yogurt
+Dairy
+150
+3/25/22
+4.99
+When you're tired of drinking water, this is a healthy option too.
+30
+
+Rotisserie Chicken 
+Meat 
+1037
+5/20/22
+5.99
+Somehow even cheaper and jucier! Seriously get them quick.
+20
+
+Ground Beef
+Meat 
+232
+5/10/22
+7.99
+Burger day coming right up! 
+50
+
+Bacon
+Meat 
+430
+4/10/22
+11.99
+We even have vegan options! Ask us!
+50
+
+White Bread
+Bakery
+160
+4/15/22
+3.99
+Prop tip: The carbs get even simpler if you cut the crust!
+30
+
+Blueberry Bagels 
+Bakery
+300
+4/09/22
+4.99
+Ten total. Crunchy and savory when toasted! For the perfect breakfast meal.
+10
+
+Red Velvet Cupcakes 
+Bakery 
+1550
+6/23/22
+15.99
+Ten total. The best cupcake of them all, honestly.
+40
+
+Hot Cheetos
+Snacks
+170
+5/10/24
+2.99
+Buy two get a Hot Limon Cheeto free!
+30
+
+Organic Orange Juice
+Snacks
+170
+6/10/21
+7.99
+Extremely sugary, but still a good source of VitaC.
+15
+
+Mitarashi Dango
+Snacks
+170
+4/10/21
+7.99
+Sweet and savory and chewy, a well rounded tasty snack. King of snacks.
+15

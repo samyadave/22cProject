@@ -34,14 +34,11 @@ public class Employee extends User {
         this.isManager = isManager;
     }
 
-    public void listLoginOptions() {
-
-    }
-
     @Override
     public String toString() {
-        String manager = isManager ? "true" : "false";
-        return String.format("%s\n%s\n%s\n%s\n%s", firstName, lastName, userName, password, manager);
+        // String manager = ;
+        return String.format("%s\n%s\n%s\n%s\n%s", firstName, lastName, userName, password,
+                isManager ? "true" : "false");
     }
 
 }

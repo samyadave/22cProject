@@ -288,6 +288,6 @@ public class HashTable<T> {
             throw new NullPointerException();
         }
 
-        return this.Table.get(hash(t)).getFirst();
+        return this.Table.get(hash(t)).getFirst().equals(t) ? this.Table.get(hash(t)).getFirst() : null;
     }
 }

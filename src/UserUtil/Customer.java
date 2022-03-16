@@ -3,6 +3,7 @@ package UserUtil;
 import OrderUtil.Order;
 
 /**
+ * z
  * MegaMart
  * Customer Class - 22C Course Project
  */
@@ -20,6 +21,11 @@ public class Customer extends User {
         this.unshippedOrders = new LinkedList<>();
     }
 
+    /**
+     * Constructor for reading from file
+     * 
+     * @param data
+     */
     public Customer(String[] data) {
         super(data[0], data[1], data[2], data[3]);
         this.address = data[4];
@@ -99,6 +105,21 @@ public class Customer extends User {
 
     public void addUnshippedOrders(Order unshippedOrder) {
         this.unshippedOrders.addLast(unshippedOrder);
+    }
+
+    /**
+     * Moves a specific order from unshipped to shipped
+     * linkedlist
+     * 
+     * @param orderID
+     */
+    public void shipOrder(int orderID) {
+        unshippedOrders.positionIterator();
+        while (!unshippedOrders.offEnd() && unshippedOrders.getIterator().getOrderID() != orderID) {
+            unshippedOrders.advanceIterator();
+        }
+        shippedOrders.addLast(unshippedOrders.getIterator());
+        unshippedOrders.removeIterator();
     }
 
     @Override
