@@ -10,6 +10,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.LocalDateTime;
 
+/**
+ * Orders are made in the shopping cart, however
+ * They are only given an orderID once they are purchased
+ * Additionally, they will be given a date, and the priority will be calculated
+ * Each time the program opens, previous orders in the cart will
+ * need to be updated with a new priority value
+ */
+
 public class Order {
 
     private int orderID;
@@ -83,6 +91,7 @@ public class Order {
 
     }
 
+    /** To be called on whenever refreshing an order */
     public void calculateDate() {
         LocalDate lt = LocalDate.now();
         this.date = lt.toString();

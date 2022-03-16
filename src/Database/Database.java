@@ -22,6 +22,7 @@ public abstract class Database {
     public static HashTable<Employee> employeeDatabase = new HashTable<>(100);
     public static HashTable<String> usernames = new HashTable<>(100);
     public static HashTable<String> credentials = new HashTable<>(100);
+    public static Heap<Order> shoppingCart = new Heap<>(10); 
 
     /**
      * <ul>
