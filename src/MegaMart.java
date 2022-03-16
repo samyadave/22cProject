@@ -18,7 +18,6 @@ public class MegaMart {
         Database.startUp();
         Product.populateCatalogue();
         Database.addUser(new Employee("firstName", "lastName", "yayayay", "password", false));
-        // populate products
         UserInterface u = new UserInterface();
         u.run();
     }

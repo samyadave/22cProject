@@ -22,15 +22,17 @@ public class Order {
 
     private int orderID;
     private Customer customer;
+    private String customerLogin;
     private String date; // should be the ordering date, no?
     private LinkedList<Product> orderContents; // fill in Product based on your own product class
     private int shippingSpeed; // or use enums //2, 1, 0 in that order
     private int priority;
+    private static int count = 1000;
 
     // Constructor
 
     public Order() {
-        orderID = -1;
+        orderID = ++count;
         customer = null;
         date = "";
         orderContents = new LinkedList<>();

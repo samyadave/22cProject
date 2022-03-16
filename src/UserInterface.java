@@ -103,13 +103,14 @@ public class UserInterface {
      */
     public synchronized void customerMenu(Customer cust) {
         String choice = "";
-        System.out.printf("\nWelcome to MegaMart, %s!\n", cust.getFirstName());
+        System.out.printf("\nWelcome to MegaMart%s!\n", ", " + cust.getFirstName() == null ? cust.getFirstName() : "");
         try {
             System.out.println("Loading...");
             wait(1000);
         } catch (Exception e) {
             System.out.println(e);
         }
+        // TODO: B & S add option to add to cart (add product to shopping cart)
         while (!choice.equalsIgnoreCase("X")) {
             System.out.println("A. Search for Product" + "\nB. Display Database of Products" + "\nC. Place an Order"
                     + "\nD. View your Shopping Cart" + "\nE. View Purchases" + "\nX. Exit\n");
@@ -129,7 +130,7 @@ public class UserInterface {
 
         System.out.printf("Welcome, %s!", emp.getFirstName());
         while (!choice.equalsIgnoreCase("X")) {
-            System.out.printf("\t%s\n\t%s\n\t%s\n\t%s", "A. Search for an order",
+            System.out.printf("\n\t%s\n\t%s\n\t%s\n\t%s", "A. Search for an order",
                     "B. View order with highest priority", "C. View all orders", "D. Ship order");
             if (emp.isManager()) {
                 System.out.println("\tE. Update Products Catalogue By Primary Key ");
@@ -164,11 +165,13 @@ public class UserInterface {
         int view;
         if (choice.equalsIgnoreCase("A")) {
             System.out.print("Search by:\n\tA. Name\n\tB. Product type");
+            System.out.println("\nSelect a choice: ");
             search = input.next();
             if (search.equalsIgnoreCase("A")) {
                 input.nextLine();
                 System.out.print("Enter the name of the product you wish to search for: ");
                 pname = input.nextLine();
+                // TODO: FIX product fetching
                 Product nfound = Product.searchName(pname);
                 if (nfound != null) {
                     System.out.println("One record of requested product found by name: " + nfound.toString());
@@ -176,6 +179,7 @@ public class UserInterface {
                     System.out.println("Sorry! Requested product not found in database.");
                 }
             } else if (search.equalsIgnoreCase("B")) {
+                // TODO: Update from eclipse = Meigan and Eileen
                 System.out.println("Types:\n\tBakery\n\tDairy\n\tMeat\n\tSnacks\n\tProduce");
                 System.out.print("Enter the type of product: ");
                 ptype = input.next();
@@ -202,9 +206,11 @@ public class UserInterface {
 
             // Brandon and Sol's stuff TODO:
         } else if (choice.equalsIgnoreCase("C")) {
-
+            // Product toAdd = whatever the customer chose
+            // Database.shoppingCart.add(toAdd)
         } else if (choice.equalsIgnoreCase("D")) {
-
+            // Place an order
+            // Database.orders.add(Database.shoppingCart)
         } else if (choice.equalsIgnoreCase("E")) {
             if (cust.getUnshippedOrders().getLength() == 0) {
                 System.out.println("No unshipped orders");
@@ -258,7 +264,8 @@ public class UserInterface {
                     System.out.print("Enter number of " + pname + " to add: ");
                     stock = input.nextInt();
                     nfound.updateNumInStock(stock);
-                    //TESTING PURPOSES REMOVE AFTER
+                    // TESTING PURPOSES REMOVE AFTER
+                    // TODO: Display new object added
                     Product.displaybyName();
                     Product.displaybyType();
                 } else {
@@ -275,14 +282,14 @@ public class UserInterface {
                     description = input.nextLine();
                     System.out.print("Enter the number of " + pname + " in stock: ");
                     stock = input.nextInt();
-                    
-                    Product add =  new Product(pname, ptype, calories, bestby, price, description, stock);
+
+                    Product add = new Product(pname, ptype, calories, bestby, price, description, stock);
                     p.addProduct(add);
 
-                    //TESTING PURPOSES REMOVE AFTER
+                    // TESTING PURPOSES REMOVE AFTER
                     Product.displaybyName();
                     Product.displaybyType();
-                      
+
                 }
             } else if (option.equalsIgnoreCase("B")) {
                 System.out.println("Enter the name of the product: ");
@@ -292,32 +299,32 @@ public class UserInterface {
                 tfound = Product.searchName(pname);
                 nfound = Product.searchType(ptype);
                 if (tfound != null && nfound != null) {
-                    while(search != 4) {
-                    	System.out.print("Update an existing:\n\t1. Product Price"
-                    			+ "\n\t2. Product Description\n\t3. Number in Stock\n\t4. Exit");
-                    	System.out.print("\nPlease select from one of the options: ");
-                    	search = input.nextInt();
-                    	if (search == 1) {
-                    		System.out.print("Enter new price of " + pname + ": $");
-                    		price = input.nextDouble();
+                    while (search != 4) {
+                        System.out.print("Update an existing:\n\t1. Product Price"
+                                + "\n\t2. Product Description\n\t3. Number in Stock\n\t4. Exit");
+                        System.out.print("\nPlease select from one of the options: ");
+                        search = input.nextInt();
+                        if (search == 1) {
+                            System.out.print("Enter new price of " + pname + ": $");
+                            price = input.nextDouble();
                             nfound.setPrice(price);
-                    		System.out.println("Updating the price of " + pname + "!");
-                    	} else if (search == 2) {
-                    		input.nextLine();
-                    		System.out.print("Enter your new description for " + pname + ": ");
-                    		description = input.nextLine();
-                    		nfound.setDescription(description);
-                    		System.out.println("Updating the description for " + pname + "!");
-                    	} else if (search == 3) {
-                    		System.out.print("Enter the number of " + pname + " you want to add: ");
-                    		stock = input.nextInt();
-                    		nfound.updateNumInStock(stock);
-                    		System.out.println("Updating the number of " + pname + " in stock!");
-                    	}else if (search == 4) {
-                    		System.out.println("Exiting! Back to main menu!");
-                    	} else {
-                    		System.out.println("Invalid option. Please try again!"); 
-                    	}
+                            System.out.println("Updating the price of " + pname + "!");
+                        } else if (search == 2) {
+                            input.nextLine();
+                            System.out.print("Enter your new description for " + pname + ": ");
+                            description = input.nextLine();
+                            nfound.setDescription(description);
+                            System.out.println("Updating the description for " + pname + "!");
+                        } else if (search == 3) {
+                            System.out.print("Enter the number of " + pname + " you want to add: ");
+                            stock = input.nextInt();
+                            nfound.updateNumInStock(stock);
+                            System.out.println("Updating the number of " + pname + " in stock!");
+                        } else if (search == 4) {
+                            System.out.println("Exiting! Back to main menu!");
+                        } else {
+                            System.out.println("Invalid option. Please try again!");
+                        }
                     }
                 } else {
                     System.out.println("Sorry! Requested product not found in database.");
@@ -336,10 +343,10 @@ public class UserInterface {
                     System.out.println("Sorry! Requested product not found in database.");
                 }
             } else {
-                System.out.println("Invalid option. Please try again!"); 
+                System.out.println("Invalid option. Please try again!");
             }
         } else {
-            System.out.println("\nInvalid option. Please try again!"); //loop(?)
+            System.out.println("\nInvalid option. Please try again!"); // loop(?)
         }
 
     }

@@ -26,7 +26,9 @@ public class Database {
     private static HashTable<String> credentials = new HashTable<>(100);
     private static BST<Product> itemsName = new BST<>();
     private static BST<Product> itemsType = new BST<>();
-    public static Heap<Order> shoppingCart = new Heap<>(10);
+    private static Order shoppingCart;
+    // private static Heap<Order> orders = new Heap<>(10); TODO: Update with ur new
+    // constructor
 
     public static User loggedIn;
 
@@ -211,6 +213,7 @@ public class Database {
                 }
                 Database.employeeDatabase.add(new Employee(data));
                 Database.usernames.add(data[2]);
+                Database.credentials.add(data[2] + data[3]);
             }
             f.close();
         } catch (IOException e) {
