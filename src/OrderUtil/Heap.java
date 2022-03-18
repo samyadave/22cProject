@@ -17,16 +17,6 @@ public class Heap<T> {
     private ArrayList<T> heap;
 
     /**
-     * Priority is to be assigned according to the date and time of the order and
-     * the shipping speed selected by the customer
-     * Priority Shipping Greatest to Least: Overnight shipping, rush shipping,
-     * standard shipping
-     * 
-     * The arrayList<T>
-     * 
-     */
-
-    /**
      * Constructors/
      * 
      * /**
@@ -38,7 +28,7 @@ public class Heap<T> {
     public Heap(ArrayList<T> data, Comparator<T> comparator) { // still idk
         heap = new ArrayList<>(data);
         heapSize = data.size();
-        buildHeap(heap, comparator);
+        buildHeap(comparator);
     }
 
     /** Mutators */
@@ -48,7 +38,7 @@ public class Heap<T> {
      * min heap. Called by constructor
      * Calls helper method heapify
      */
-    public void buildHeap(ArrayList<T> data, Comparator<T> comparator) { // probably fix
+    public void buildHeap(Comparator<T> comparator) { // probably fix
         for (int i = (heapSize / 2); i < 1; i--) {
             heapifyDown(i, comparator);
         }
@@ -112,21 +102,6 @@ public class Heap<T> {
             heap.set(index, temp);
             heapifyUp(indexMin, key, comparator);
         }
-
-        /*
-         * if (comparator.compare(key, heap.get(index)) > 0) {
-         * T item = heap.get(index);
-         * item = key;
-         * }
-         * while (index>1 && comparator.compare(getElement(getParent(index)),
-         * heap.get(index))<0) {
-         * T temp = heap.get(index);
-         * //swap the heap at index to equal
-         * heap.set(index, getElement(getParent(index)));
-         * heap.set(getParent(index), temp);
-         * index = getParent(index);
-         * }
-         */
     }
 
     /**
@@ -152,9 +127,6 @@ public class Heap<T> {
             heapSize--;
             heapifyDown(index, comparator);
         }
-        // heap.remove(index);
-        // heapSize--;
-        // heap.insert(getElement(heapSize)
     }
 
     /** Accessors */
@@ -261,11 +233,43 @@ public class Heap<T> {
         return heap.get(index);
     }
 
+    /**
+     * TODO: Returns the according order
+     * 
+     * @param customerLogin
+     */
+    public Order getOrder(String customerLogin, Comparator<T> comparator) {
+        Order o = new Order();
+        return null;
+    }
+
     /** Additional Operations */
 
-    public T search(T data, Comparator<T> comparator){
-        if(isEmpty()){
-            return 
+    public T search(T data, Comparator<T> comparator) throws NullPointerException {
+        if (isEmpty()) {
+            throw new NullPointerException("search(): No elements to search for!");
+        } else {
+            int index = 1;
+            return search(data, index, comparator);
+        }
+    }
+
+    private T search(T data, int index, Comparator<T> comparator) {
+
+        if (comparator.compare(data, getElement(index)) == 0) {
+            return data;
+        } else if (comparator.compare(data, getElement(index)) < 0) {
+            if (!hasLeft(index)) {
+                return null;
+            } else {
+                return search(data, getLeft(index), comparator);
+            }
+        } else {
+            if (!hasRight(index)) {
+                return null;
+            } else {
+                return search(data, getRight(index), comparator);
+            }
         }
     }
 
@@ -293,49 +297,26 @@ public class Heap<T> {
         return new ArrayList<T>();
     }
 
-    class shippingComparator implements Comparator<Order> {
-        /**
-         * Compares the shipping time of two Product objects,
-         * then compares the time of order of two Product objects
-         * 
-         * @param p1 first product to compare
-         * @param p2 second prodcut to compare
-         * @return an int based on if p1 is >, <, or = to p2
-         */
-        @Override
-        public int compare(Order p1, Order p2) {
-            if (p1.equals(p2)) {
-                return 0;
-            }
-            return Integer.compare(p1.getShippingSpeed(), (p2.getShippingSpeed()));
+}
+
+class priorityComparator implements Comparator<Order> {
+    @Override
+    public int compare(Order p1, Order p2) {
+        if (p1.equals(p2)) {
+            return 0;
         }
+        return Integer.compare(p1.getPriority(), (p2.getPriority()));
     }
+}
 
-    class dateComparator implements Comparator<Order> {
-        /**
-         * Compares the shipping time of two Product objects,
-         * then compares the time of order of two Product objects
-         * 
-         * @param p1 first product to compare
-         * @param p2 second prodcut to compare
-         * @return an int based on if p1 is >, <, or = to p2
-         */
-        @Override
-        public int compare(Order p1, Order p2) {
-            if (p1.equals(p2)) {
-                return 0;
-            }
-            return p1.getDate().compareTo(p2.getDate());
+class customerComparator implements Comparator<Order> {
+
+    @Override
+    public int compare(Order o1, Order o2) {
+        if (o1.equals(o2)) {
+            return 0;
         }
-    }
-
-    /**
-     * TODO: Returns the according order
-     * 
-     * @param customerLogin
-     */
-    public void getOrder(String customerLogin) {
-
+        return o1.getCName().compareTo(o2.getCName());
     }
 
 }

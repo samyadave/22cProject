@@ -24,7 +24,8 @@ public class Order {
     private Customer customer;
     private String customerLogin;
     private String date; // should be the ordering date, no?
-    private LinkedList<Product> orderContents; // fill in Product based on your own product class
+    // private LinkedList<Product> orderContents; // fill in Product based on your
+    // own product class
     private int shippingSpeed; // or use enums //2, 1, 0 in that order
     private int priority;
     private static int count = 1000;
@@ -34,22 +35,21 @@ public class Order {
     public Order() {
         orderID = ++count;
         customer = null;
+        customerLogin = "";
         date = "";
-        orderContents = new LinkedList<>();
         shippingSpeed = -1;
         priority = -1;
-        // priority = -1; for now, not really sure. could be a value we'd have to
-        // calculate instead
     }
 
     // orderContents
-    public Order(int orderID, Customer customer, String date, LinkedList<Product> o, int shippingSpeed) {
-        orderID = this.orderID; // should this be randomized? in this class or in other? should be around 10
+    public Order(int orderID, Customer customer, String date, int shippingSpeed) {
+        orderID = this.orderID;
         customer = this.customer;
-        date = this.date;
-        orderContents = new LinkedList<>(o); // copies o onto the orderContents
+        customerLogin = customer.getLogin();
+        date = LocalDate.now().toString();
+        // orderContents = new LinkedList<>(o); // copies o onto the orderContents
         shippingSpeed = this.shippingSpeed;
-        priority = -1;
+        priority = this.calculatePriority(shippingSpeed);
     }
 
     /** GETTERS/ACCESSORS */
@@ -61,13 +61,18 @@ public class Order {
         return customer;
     }
 
+    public String getCName() {
+        String c = "" + this.getCustomer().getFirstName() + " " + this.getCustomer().getLastName();
+        return c;
+    }
+
     public String getDate() {
         return date;
     }
 
-    public LinkedList<Product> getOrderContents() {
-        return orderContents;
-    }
+    // public LinkedList<Product> getOrderContents() {
+    // return orderContents;
+    // }
 
     public int getShippingSpeed() {
         return shippingSpeed;
@@ -78,25 +83,33 @@ public class Order {
     }
 
     /** MUTATOR FOR PRIORITY */
-    public void calculatePriority(int shippingSpeed) { // what do we think about updating the priority values constantly
-                                                       // based on local time?
+    public int calculatePriority(int shippingSpeed) {
         LocalTime lt = LocalTime.now();
+        LocalDate ld = LocalDate.now();
+        int hour = lt.getHour();
+        int minute = lt.getMinute();
+        int day = ld.getDayOfMonth();
+        int month = ld.getMonthValue();
 
-        int shippingSpeedInt;
-        int dateInt;
-        int timeInt;
-        int total;
-        shippingSpeedInt = (shippingSpeed + 1) * 2;
-        // this.date.
+        // overnight - 1 day
+        // rush - 3 day
+        // standard - 5 day
 
-        // total = shippingSpeedInt + dateInt + timeInt;
+        if (shippingSpeed == 1) {
+            day++;
+        } else if (shippingSpeed == 2) {
+            day += 3;
+        } else {
+            day += 5;
+        }
+
+        return day + hour + minute + month;
 
     }
 
-    /** To be called on whenever refreshing an order */
-    public void calculateDate() {
-        LocalDate lt = LocalDate.now();
-        this.date = lt.toString();
+    public static Order getOrder(String customerLogin) {
+        Order o = new Order();
+        return null;
     }
 
     @Override
@@ -115,8 +128,7 @@ public class Order {
         return "Order ID: " + orderID + "\n" +
                 "Customer: " + customer.getFirstName() + " " + customer.getLastName() + "\n" +
                 "Date Ordered: " + date + "\n" +
-                "OrderedContents" + orderContents.toString() + "\n"
-                + "Shipping Speed: " + sShippingSpeed + "\n" +
+                "Shipping Speed: " + sShippingSpeed + "\n" +
                 "Priority: " + priority;
 
     }
@@ -130,8 +142,8 @@ public class Order {
         } else {
             Order p = (Order) o;
             return this.getOrderID() == p.getOrderID() && this.getCustomer().equals(p.getCustomer()) &&
-                    getDate().equalsIgnoreCase(p.getDate()) && this.getOrderContents().equals(p.getOrderContents())
-                    && (this.getShippingSpeed() == p.getShippingSpeed()) && this.getPriority() == p.getPriority();
+                    getDate().equalsIgnoreCase(p.getDate()) && (this.getShippingSpeed() == p.getShippingSpeed())
+                    && this.getPriority() == p.getPriority();
         }
     }
 }

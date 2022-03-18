@@ -1,4 +1,3 @@
-
 import java.util.Scanner;
 
 import Database.Database;
@@ -356,7 +355,34 @@ public class UserInterface {
      * @param choice
      */
     private void employee(String choice) {
-        // Brandon and Sol's TODO
+
+        if (choice.equalsIgnoreCase("A")) { // search for order
+            System.out.println("Would you like to search your order by:"
+                    + "\nA.Order ID" + "\n" +
+                    "B. Customer First and Last name");
+
+            // SEARCHING FOR ORDER
+
+            String searchOption = input.next();
+            if (searchOption.equalsIgnoreCase("A")) {
+                System.out.println("Please enter the order ID: ");
+                String orderID = input.next();
+                // some method to accept the orderID and find order
+            } else if (searchOption.equalsIgnoreCase("B")) {
+                System.out.println("Please enter customer first and last name: ");
+            } else {
+
+            }
+        } else if (choice.equalsIgnoreCase("B")) { // view order w/ highest priority
+            System.out.println("Order with Highest Priority: ");
+        } else if (choice.equalsIgnoreCase("C")) { // view all orders
+            System.out.println("Viewing all Orders by Highest Priority: " + "\n");
+
+        } else if (choice.equalsIgnoreCase("D")) { // ship order
+            // call remove from heap and puts the order into customer linked list
+        } else {
+
+        }
     }
 
 }
