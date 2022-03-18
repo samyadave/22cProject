@@ -3,9 +3,13 @@ package UserUtil;
 import OrderUtil.Order;
 
 /**
- * z
- * MegaMart
- * Customer Class - 22C Course Project
+ * Customer.java
+ * @author Meigan Lu
+ * @author Eileen Huynh
+ * @author Sol Valdimarsdottir
+ * @author Sam Yadav
+ * @author Brandon Ho
+ * CIS 22C Course Project
  */
 
 public class Customer extends User {

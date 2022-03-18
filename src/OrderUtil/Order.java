@@ -1,3 +1,12 @@
+/**
+ * Order.java
+ * @author Meigan Lu
+ * @author Eileen Huynh
+ * @author Sol Valdimarsdottir
+ * @author Sam Yadav
+ * @author Brandon Ho
+ * CIS 22C Course Project
+ */
 package OrderUtil;
 
 import java.util.ArrayList;

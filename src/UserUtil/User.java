@@ -1,8 +1,14 @@
 package UserUtil;
 
 /**
- * MegaMart
- * User abstract Class - 22C Course Project
+ * User.java
+ * Abstract Class
+ * @author Meigan Lu
+ * @author Eileen Huynh
+ * @author Sol Valdimarsdottir
+ * @author Sam Yadav
+ * @author Brandon Ho
+ * CIS 22C Course Project
  */
 
 public abstract class User {

@@ -1,9 +1,13 @@
 package UserUtil;
-/*
- * Defines a doubly-linked list class
+/**
+ * LinkedList.java
+ * @author Meigan Lu
+ * @author Eileen Huynh
  * @author Sol Valdimarsdottir
  * @author Sam Yadav
-*/
+ * @author Brandon Ho
+ * CIS 22C Course Project
+ */
 
 import java.util.NoSuchElementException;
 

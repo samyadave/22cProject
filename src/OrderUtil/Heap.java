@@ -1,8 +1,13 @@
 package OrderUtil;
 
 /**
- * @author
- * Final Project
+ * Heap.java
+ * @author Meigan Lu
+ * @author Eileen Huynh
+ * @author Sol Valdimarsdottir
+ * @author Sam Yadav
+ * @author Brandon Ho
+ * CIS 22C Course Project
  */
 
 //Maybe when ordering stuff we can keep track of when the person makes an order with the time import class

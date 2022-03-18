@@ -1,3 +1,12 @@
+/**
+ * Product.java
+ * @author Meigan Lu
+ * @author Eileen Huynh
+ * @author Sol Valdimarsdottir
+ * @author Sam Yadav
+ * @author Brandon Ho
+ * CIS 22C Course Project
+ */
 package ProductUtil;
 
 import java.text.DecimalFormat;

@@ -1,11 +1,14 @@
 package UserUtil;
 
 /**
-* HashTable.java
-* @author Sam Yadav
-* @author Sol Valdimarsdottir
-* CIS 22C, Lab 5
-*/
+ * HashTable.java
+ * @author Meigan Lu
+ * @author Eileen Huynh
+ * @author Sol Valdimarsdottir
+ * @author Sam Yadav
+ * @author Brandon Ho
+ * CIS 22C Course Project
+ */
 import java.util.ArrayList;
 
 public class HashTable<T> {

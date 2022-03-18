@@ -1,8 +1,13 @@
 package UserUtil;
 
 /**
- * MegaMart
- * Employee Class - 22C Course Project
+ * Employee.java
+ * @author Meigan Lu
+ * @author Eileen Huynh
+ * @author Sol Valdimarsdottir
+ * @author Sam Yadav
+ * @author Brandon Ho
+ * CIS 22C Course Project
  */
 
 public class Employee extends User {
