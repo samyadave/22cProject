@@ -306,7 +306,7 @@ public class BST<T> {
 
     private T search(T data, Node node, Comparator<T> comparator) {
         if (comparator.compare(data, node.data) == 0) {
-            return data;
+            return node.data;
         } else if (comparator.compare(data, node.data) < 0) {
             if (node.left == null) {
                 return null;
@@ -386,7 +386,7 @@ public class BST<T> {
     public String inOrderString() {
         StringBuilder inOrder = new StringBuilder();
         inOrderString(root, inOrder);
-        return inOrder + "\n";
+        return inOrder + "";
     }
 
     /**

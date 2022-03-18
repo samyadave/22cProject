@@ -143,7 +143,7 @@ public class Database {
      */
     private static void populateCustomers() {
         try {
-            BufferedReader f = new BufferedReader(new FileReader(".\\src\\Database\\Customer.txt"));
+            BufferedReader f = new BufferedReader(new FileReader("/Users/Meigan/CIS/22cProject/src/Database/Customer.txt"));
             String line = f.readLine();
             while (line != null) {
                 String[] data = new String[8];
@@ -188,7 +188,7 @@ public class Database {
      */
     private static void addCustomer(Customer c) {
         try {
-            BufferedWriter f = new BufferedWriter(new FileWriter(".\\src\\Database\\Customer.txt", true));
+            BufferedWriter f = new BufferedWriter(new FileWriter("/Users/Meigan/CIS/22cProject/src/Database/Customer.txt", true));
             f.write('\n' + c.toString());
             f.close();
         } catch (IOException e) {
@@ -203,7 +203,7 @@ public class Database {
      */
     private static void populateEmployees() {
         try {
-            BufferedReader f = new BufferedReader(new FileReader(".\\src\\Database\\Employee.txt"));
+            BufferedReader f = new BufferedReader(new FileReader("/Users/Meigan/CIS/22cProject/src/Database/Employee.txt"));
             String line = f.readLine();
             while (line != null) {
                 String[] data = new String[5];
@@ -230,7 +230,7 @@ public class Database {
      */
     private static void addEmployee(Employee emp) {
         try {
-            BufferedWriter f = new BufferedWriter(new FileWriter(".\\src\\Database\\Employee.txt", true));
+            BufferedWriter f = new BufferedWriter(new FileWriter("/Users/Meigan/CIS/22cProject/src/Database/Employee.txt", true));
             f.write('\n' + emp.toString());
             f.close();
         } catch (IOException e) {

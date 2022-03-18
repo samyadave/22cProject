@@ -22,9 +22,9 @@ public class Product {
 	 * @param input Scanner
 	 * 
 	 */
-	public static void populateCatalogue() {
+	public static void populateCatalogue() { //in database or no?
 		try {
-			Scanner input = new Scanner(new File(".\\src\\Database\\Catalogue.txt"));
+			Scanner input = new Scanner(new File("/Users/Meigan/CIS/22cProject/src/Database/Catalogue.txt"));
 			String name = "";
 			String type = "";
 			int calories = 0;
@@ -172,21 +172,24 @@ public class Product {
 	}
 
 	/**
-	 * Returns the price of the product
-	 * 
-	 * @return the price
+	 * Set the price of the product
 	 */
 	public void setPrice(double price) {
 		this.price = price;
 	}
 
 	/**
-	 * Returns the description of the product
-	 * 
-	 * @return the description
+	 * Set the description of the product
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * Set the number in stock of the product
+	 */
+	public void setNumInStock(int numInStock) {
+		this.numInStock = numInStock;
 	}
 
 	/**
@@ -221,7 +224,7 @@ public class Product {
 	 * sorted by primary key name
 	 */
 	public static void displaybyName() { //move to database
-		System.out.println("Products sorted by Name: " + itemsName.inOrderString());
+		System.out.println("\nProducts sorted by Name: " + itemsName.inOrderString());
 	}
 
 	/**
@@ -229,7 +232,7 @@ public class Product {
 	 * sorted by secondary key type
 	 */
 	public static void displaybyType() { //move to database
-		System.out.println("Products sorted by Type: " + itemsType.inOrderString());
+		System.out.println("\nProducts sorted by Type: " + itemsType.inOrderString());
 	}
 
 	/**
