@@ -414,7 +414,7 @@ public class UserInterface {
     /**
      * write employee/manager activity log and receipt to an outfile
      */
-    public void printLog(ArrayList<String> log) throws IOException {
+    public void printLog(ArrayList<String> log) {
         try {
 			if (log != null) {
 				File file = new File("Log.txt");
@@ -428,7 +428,7 @@ public class UserInterface {
 				System.out.println("You have no activities from today!");
 			}
 		} catch (IOException e) {
-			throw new IOException("The file is not found!");
+			System.out.println(e);
 		}
         
 
@@ -438,7 +438,7 @@ public class UserInterface {
     /**
      * write customer order information and receipt to an outfile
      */
-    public void printReceipt(ArrayList<String> receipt) throws IOException{
+    public void printReceipt(ArrayList<String> receipt) {
         try {
 			if (receipt != null) {
 				File file = new File("Receipt.txt");
@@ -452,7 +452,7 @@ public class UserInterface {
 				System.out.println("You have no pending orders!");
 			}
 		} catch (IOException e) {
-			throw new IOException("The file is not found!");
+			System.out.println(e);
 		}
 
     }
