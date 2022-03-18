@@ -13,3 +13,8 @@ lastName
 yayayay
 password
 false
+firstName
+lastName
+yayayay
+password
+false

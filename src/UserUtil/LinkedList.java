@@ -196,6 +196,9 @@ public class LinkedList<T> {
      * @postcondition a new node is inserted at the end of the list
      */
     public void addLast(T data) {
+        if (data == null) {
+            System.out.println("BURHRURHRH");
+        }
         if (length == 0) {
             first = last = new Node(data);
         } else {

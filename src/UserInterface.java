@@ -1,3 +1,4 @@
+
 /**
  * UserInterface.java
  * @author Meigan Lu
@@ -9,9 +10,13 @@
  */
 import java.util.Scanner;
 
+import javax.xml.crypto.Data;
+
 import Database.Database;
 import Database.Database.Status;
 import Database.Database.UserType;
+import OrderUtil.Order;
+import OrderUtil.Order.ShippingSpeed;
 import ProductUtil.Product;
 import UserUtil.Customer;
 import UserUtil.Employee;
@@ -22,11 +27,13 @@ import java.io.PrintWriter;
 
 public class UserInterface {
     private static Scanner input = new Scanner(System.in);
-    
+
     private static ArrayList<String> receipt = new ArrayList<String>();
     private static ArrayList<String> log = new ArrayList<String>();
-    
-    public UserInterface() { //do we need this?
+
+    private Order shoppingCart = new Order();
+
+    public UserInterface() {
 
     }
 
@@ -49,7 +56,6 @@ public class UserInterface {
                 break;
         }
 
-        
     }
 
     /**
@@ -117,6 +123,7 @@ public class UserInterface {
 
     /**
      * prints the customer menu
+     * 
      * @param cust verify user position
      */
     public synchronized void customerMenu(Customer cust) {
@@ -128,11 +135,12 @@ public class UserInterface {
         } catch (Exception e) {
             System.out.println(e);
         }
-        // TODO: B & S add option to add to cart (add product to shopping cart)
+
         while (!choice.equalsIgnoreCase("X")) {
-            System.out.println("\tMenu: " + "\n\tA. Search for Product" + "\n\tB. Display Database of Products" + "\n\tC. Place an Order"
-                    + "\n\tD. View your Shopping Cart" + "\n\tE. View Purchases" + "\n\tX. Exit");
-            System.out.print("Please select from one of the options: ");
+            System.out.println("\tMenu: " + "\n\tA. Search for Product" + "\n\tB. Display Database of Products"
+                    + "\n\tC. Place an Order"
+                    + "\n\tD. View your Shopping Cart" + "\n\tE. View Purchases" + "\n\tX. Exit\n");
+            System.out.print("\nPlease select from one of the options: ");
             choice = input.next(); // taking in choices from menu
             customer(choice, cust);
         }
@@ -143,6 +151,7 @@ public class UserInterface {
 
     /**
      * print out employee/manager menu
+     * 
      * @param emp usr position
      */
     public void employeeMenu(Employee emp) { // looks good
@@ -170,11 +179,11 @@ public class UserInterface {
         printLog(log);
     }
 
-
     /**
      * implements the menu options for a customer
+     * 
      * @param choice the menu option the user chooses as a customer
-     * @param cust a customer
+     * @param cust   a customer
      */
     private void customer(String choice, Customer cust) {
         String pname, ptype, search;
@@ -190,6 +199,12 @@ public class UserInterface {
                 Product nfound = Product.searchName(pname);
                 if (nfound != null) {
                     System.out.println("One record of requested product found by name: " + nfound.toString());
+                    System.out.println("Add to cart (y/n)?");
+                    String add = input.next();
+                    if (add.equalsIgnoreCase("y")) {
+                        shoppingCart.addProduct(nfound);
+                        System.out.println("Item added to cart!");
+                    }
                 } else {
                     System.out.println("Sorry! Requested product not found in database.");
                 }
@@ -200,6 +215,12 @@ public class UserInterface {
                 Product tfound = Product.searchType(ptype);
                 if (tfound != null) {
                     System.out.println("One record of requested product found by type: \n" + tfound.toString());
+                    System.out.println("Add to cart (y/n)?");
+                    String add = input.next();
+                    if (add.equalsIgnoreCase("y")) {
+                        shoppingCart.addProduct(tfound);
+                        System.out.println("Item added to cart!");
+                    }
                 } else {
                     System.out.println("Sorry! Requested product not found in database.");
                 }
@@ -216,17 +237,30 @@ public class UserInterface {
             } else if (view == 2) {
                 Product.displaybyType();
             } else {
-                System.out.println("Sorry! Invalid option."); 
+                System.out.println("Sorry! Invalid option.");
             }
 
+            // Place an order, make a priority and ID
             // Brandon and Sol's stuff TODO:
         } else if (choice.equalsIgnoreCase("C")) {
-            // Product toAdd = whatever the customer chose
-            // Database.shoppingCart.add(toAdd)
-        } else if (choice.equalsIgnoreCase("D")) {
-            // Place an order
-            // Database.orders.add(Database.shoppingCart)
-        } else if (choice.equalsIgnoreCase("E")) {
+            System.out.printf("\t%s\n\t%s\n\t%s", "Overnight: 7000 Bruhcoins ($0.07)", "Rush: 4500 BruhCoins ($0.04)",
+                    "Standard: 100 BruhCoins ($0.001)");
+            System.out.println("Select shipping speed: ");
+            String ship = input.next();
+            ShippingSpeed s = ship.toLowerCase() == "overnight" ? ShippingSpeed.OVERNIGHT
+                    : ship.toLowerCase() == "rush" ? ShippingSpeed.RUSH
+                            : ship.toLowerCase() == "standard" ? ShippingSpeed.STANDARD : null;
+            shoppingCart.changeShippingSpeed(s);
+            System.out.println("Total price is: " + shoppingCart.getPrice());
+            System.out.println("Here is your shopping cart: \n\n");
+            System.out.println(shoppingCart.toString());
+        } else if (choice.equalsIgnoreCase("D")) {// view shopping cart
+            System.out.println("Here is your shopping cart: \n\n");
+            // get shopping cart and print it using toString from Heap
+
+            System.out.println(shoppingCart.toString());
+
+        } else if (choice.equalsIgnoreCase("E")) {// view purchases
             if (cust.getUnshippedOrders().getLength() == 0) {
                 System.out.println("No unshipped orders");
             } else {
@@ -249,6 +283,7 @@ public class UserInterface {
 
     /**
      * implements the menu choice the user has chosen
+     * 
      * @param choice from menu option
      */
     private void manager(String choice) {
@@ -261,8 +296,9 @@ public class UserInterface {
         Product tfound, nfound;
         if (choice.equalsIgnoreCase("E")) {
             System.out.println("\n\tMenu:" +
-                    "\n\tA. Add New Product" + "\n\tB. Update an Existing Product Price, Description or Add More to Stock"
-                            + "\n\tC. Remove a Product" + "\n\tD. Display All Products");
+                    "\n\tA. Add New Product"
+                    + "\n\tB. Update an Existing Product Price, Description or Add More to Stock"
+                    + "\n\tC. Remove a Product" + "\n\tD. Display All Products");
             System.out.print("Please select from one of the options: ");
             option = input.next();
             input.nextLine();
@@ -278,7 +314,7 @@ public class UserInterface {
                     System.out.print("Enter number of " + pname + " to add: ");
                     stock = input.nextInt();
                     nfound.updateNumInStock(stock);
-                  
+
                     System.out.print(nfound.toString());
                     log.add("Updated number of " + pname + " in stock: " + stock + "\n");
                 } else {
@@ -337,13 +373,13 @@ public class UserInterface {
                             nfound.setNumInStock(stock);
                             System.out.println("\nUpdating the number of " + pname + " in stock!");
                             System.out.print(nfound.toString());
-                             log.add("Updated number of " + pname + " in stock: " + stock);
+                            log.add("Updated number of " + pname + " in stock: " + stock);
                         } else if (search == 4) {
                             System.out.println("Exiting! Back to main menu!");
                         } else {
                             System.out.println("Invalid option. Please try again!");
                         }
-                        
+
                     }
                 } else {
                     System.out.println("Sorry! Requested product not found in database.");
@@ -362,20 +398,21 @@ public class UserInterface {
                 } else {
                     System.out.println("Sorry! Requested product not found in database.");
                 }
-            }else if(option.equalsIgnoreCase("D")) {
+            } else if (option.equalsIgnoreCase("D")) {
                 Product.displaybyName();
                 Product.displaybyType();
             } else {
                 System.out.println("Invalid option. Please try again!");
             }
-       } else {
-            System.out.println("\nInvalid option. Please try again!"); 
+        } else {
+            System.out.println("\nInvalid option. Please try again!");
         }
 
     }
 
     /**
      * implements the menu options for an employee
+     * 
      * @param choice the menu option the user chooses as a customer
      */
     private void employee(String choice) {
@@ -404,9 +441,9 @@ public class UserInterface {
         } else if (choice.equalsIgnoreCase("D")) { // ship order
             // call remove from heap and puts the order into customer linked list
         } else if (choice.equalsIgnoreCase("X")) {
-            
+
         } else {
-            System.out.println("#####\nInvalid option. Please try again!"); 
+            System.out.println("#####\nInvalid option. Please try again!");
             System.out.println("Within employee else statement");
         }
     }
@@ -416,44 +453,42 @@ public class UserInterface {
      */
     public void printLog(ArrayList<String> log) {
         try {
-			if (log != null) {
-				File file = new File("Log.txt");
-				PrintWriter output = new PrintWriter(file);
+            if (log != null) {
+                File file = new File("Log.txt");
+                PrintWriter output = new PrintWriter(file);
 
-				for (int i = 0; i < log.size(); i++) {
-					output.println(log.get(i));
-				}
-				output.close();
-			} else {
-				System.out.println("You have no activities from today!");
-			}
-		} catch (IOException e) {
-			System.out.println(e);
-		}
-        
+                for (int i = 0; i < log.size(); i++) {
+                    output.println(log.get(i));
+                }
+                output.close();
+            } else {
+                System.out.println("You have no activities from today!");
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
 
     }
-
 
     /**
      * write customer order information and receipt to an outfile
      */
     public void printReceipt(ArrayList<String> receipt) {
         try {
-			if (receipt != null) {
-				File file = new File("Receipt.txt");
-				PrintWriter output = new PrintWriter(file);
+            if (receipt != null) {
+                File file = new File("Receipt.txt");
+                PrintWriter output = new PrintWriter(file);
 
-				for (int i = 0; i < receipt.size(); i++) {
-					output.println(receipt.get(i));
-				}
-				output.close();
-			} else {
-				System.out.println("You have no pending orders!");
-			}
-		} catch (IOException e) {
-			System.out.println(e);
-		}
+                for (int i = 0; i < receipt.size(); i++) {
+                    output.println(receipt.get(i));
+                }
+                output.close();
+            } else {
+                System.out.println("You have no pending orders!");
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
 
     }
 

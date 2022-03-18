@@ -11,10 +11,12 @@ package Database;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.Scanner;
 
 import OrderUtil.Heap;
 import OrderUtil.Order;
@@ -35,9 +37,8 @@ public class Database {
     private static HashTable<String> credentials = new HashTable<>(100);
     private static BST<Product> itemsName = new BST<>();
     private static BST<Product> itemsType = new BST<>();
-    private static Order shoppingCart;
-    // private static Heap<Order> orders = new Heap<>(10); TODO: Update with ur new
-    // constructor
+    private static Heap<Order> orders = new Heap<>(10);
+    // TODO: Update with ur newconstructor
 
     public static User loggedIn;
 
@@ -152,7 +153,8 @@ public class Database {
      */
     private static void populateCustomers() {
         try {
-            BufferedReader f = new BufferedReader(new FileReader("/Users/Meigan/CIS/22cProject/src/Database/Customer.txt"));
+            BufferedReader f = new BufferedReader(
+                    new FileReader("./src/Database/Customer.txt"));
             String line = f.readLine();
             while (line != null) {
                 String[] data = new String[8];
@@ -181,13 +183,13 @@ public class Database {
         }
     }
 
-    /**
-     * Creates 2-way connection between order objects and
-     * customer objects on startup
-     */
-    private static void addOrderConnection(Customer c) {
-
-    }
+    // /**
+    // * Creates 2-way connection between order objects and
+    // * customer objects on startup
+    // */
+    // private static void addOrderConnection(Customer c) {
+    // c
+    // }
 
     /**
      * Creates a new entry in the file when
@@ -197,7 +199,8 @@ public class Database {
      */
     private static void addCustomer(Customer c) {
         try {
-            BufferedWriter f = new BufferedWriter(new FileWriter("/Users/Meigan/CIS/22cProject/src/Database/Customer.txt", true));
+            BufferedWriter f = new BufferedWriter(
+                    new FileWriter("./src/Database/Customer.txt", true));
             f.write('\n' + c.toString());
             f.close();
         } catch (IOException e) {
@@ -212,7 +215,8 @@ public class Database {
      */
     private static void populateEmployees() {
         try {
-            BufferedReader f = new BufferedReader(new FileReader("/Users/Meigan/CIS/22cProject/src/Database/Employee.txt"));
+            BufferedReader f = new BufferedReader(
+                    new FileReader("./src/Database/Employee.txt"));
             String line = f.readLine();
             while (line != null) {
                 String[] data = new String[5];
@@ -239,7 +243,8 @@ public class Database {
      */
     private static void addEmployee(Employee emp) {
         try {
-            BufferedWriter f = new BufferedWriter(new FileWriter("/Users/Meigan/CIS/22cProject/src/Database/Employee.txt", true));
+            BufferedWriter f = new BufferedWriter(
+                    new FileWriter("./src/Database/Employee.txt", true));
             f.write('\n' + emp.toString());
             f.close();
         } catch (IOException e) {
@@ -254,41 +259,41 @@ public class Database {
      * 
      */
     private static void populateCatalogue() {
-        // try {
-        // Scanner input = new Scanner(new File(".\\src\\Database\\Catalogue.txt"));
-        // String name = "";
-        // String type = "";
-        // int calories = 0;
-        // String bestby = "";
-        // double price = 0.0;
-        // String description = "";
-        // int numInStock = 0;
+        try {
+            Scanner input = new Scanner(new File("\\src\\Database\\Catalogue.txt"));
+            String name = "";
+            String type = "";
+            int calories = 0;
+            String bestby = "";
+            double price = 0.0;
+            String description = "";
+            int numInStock = 0;
 
-        // while (input.hasNextLine()) {
-        // name = input.nextLine();
-        // type = input.nextLine();
-        // calories = input.nextInt();
-        // input.nextLine();
-        // bestby = input.nextLine();
-        // price = input.nextDouble();
-        // input.nextLine();
-        // description = input.nextLine();
-        // numInStock = input.nextInt();
+            while (input.hasNextLine()) {
+                name = input.nextLine();
+                type = input.nextLine();
+                calories = input.nextInt();
+                input.nextLine();
+                bestby = input.nextLine();
+                price = input.nextDouble();
+                input.nextLine();
+                description = input.nextLine();
+                numInStock = input.nextInt();
 
-        // if (input.hasNextLine()) {
-        // input.nextLine();
-        // input.nextLine();
-        // }
+                if (input.hasNextLine()) {
+                    input.nextLine();
+                    input.nextLine();
+                }
 
-        // Product p = new Product(name, type, calories, bestby, price, description,
-        // numInStock);
-        // itemsName.insert(p, new nameComparator());
-        // itemsType.insert(p, new typeComparator());
+                Product p = new Product(name, type, calories, bestby, price, description,
+                        numInStock);
+                itemsName.insert(p, new NameComparator());
+                itemsType.insert(p, new TypeComparator());
 
-        // }
-        // } catch (IOException e) {
-        // // TODO: handle exception
-        // }
+            }
+        } catch (IOException e) {
+            // TODO: handle exception
+        }
     }
 
     /**
@@ -350,6 +355,7 @@ public class Database {
         Product t = new Product("", type);
         return itemsType.search(t, new NameComparator());
     }
+
 }
 
 /**

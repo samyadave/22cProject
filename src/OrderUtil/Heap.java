@@ -15,11 +15,15 @@ package OrderUtil;
 import java.util.Comparator;
 import java.util.ArrayList;
 
-@SuppressWarnings("unused")
 public class Heap<T> {
 
     private int heapSize;
     private ArrayList<T> heap;
+
+    public Heap(int size) {
+        this.heap = new ArrayList<>(size);
+        this.heapSize = size;
+    }
 
     /**
      * Constructors/
@@ -238,16 +242,6 @@ public class Heap<T> {
         return heap.get(index);
     }
 
-    /**
-     * TODO: Returns the according order
-     * 
-     * @param customerLogin
-     */
-    public Order getOrder(String customerLogin, Comparator<T> comparator) {
-        Order o = new Order();
-        return null;
-    }
-
     /** Additional Operations */
 
     public T search(T data, Comparator<T> comparator) throws NullPointerException {
@@ -304,7 +298,7 @@ public class Heap<T> {
 
 }
 
-class priorityComparator implements Comparator<Order> {
+class PriorityComparator implements Comparator<Order> {
     @Override
     public int compare(Order p1, Order p2) {
         if (p1.equals(p2)) {
@@ -314,7 +308,7 @@ class priorityComparator implements Comparator<Order> {
     }
 }
 
-class customerComparator implements Comparator<Order> {
+class CustomerComparator implements Comparator<Order> {
 
     @Override
     public int compare(Order o1, Order o2) {
@@ -323,5 +317,15 @@ class customerComparator implements Comparator<Order> {
         }
         return o1.getCName().compareTo(o2.getCName());
     }
+}
 
+class IDcomparator implements Comparator<Order> {
+
+    @Override
+    public int compare(Order o1, Order o2) {
+        if (o1.equals(o2)) {
+            return 0;
+        }
+        return Integer.compare(o1.getOrderID(), o2.getOrderID());
+    }
 }

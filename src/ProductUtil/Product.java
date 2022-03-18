@@ -31,9 +31,9 @@ public class Product {
 	 * @param input Scanner
 	 * 
 	 */
-	public static void populateCatalogue() { //in database or no?
+	public static void populateCatalogue() { // in database or no?
 		try {
-			Scanner input = new Scanner(new File("/Users/Meigan/CIS/22cProject/src/Database/Catalogue.txt"));
+			Scanner input = new Scanner(new File("./src/Database/Catalogue.txt"));
 			String name = "";
 			String type = "";
 			int calories = 0;
@@ -232,7 +232,7 @@ public class Product {
 	 * Displays all products stored in the BST
 	 * sorted by primary key name
 	 */
-	public static void displaybyName() { //move to database
+	public static void displaybyName() { // move to database
 		System.out.println("\nProducts sorted by Name: " + itemsName.inOrderString());
 	}
 
@@ -240,7 +240,7 @@ public class Product {
 	 * Displays all products stored in the BST
 	 * sorted by secondary key type
 	 */
-	public static void displaybyType() { //move to database
+	public static void displaybyType() { // move to database
 		System.out.println("\nProducts sorted by Type: " + itemsType.inOrderString());
 	}
 
@@ -250,7 +250,7 @@ public class Product {
 	 * @param name of product to search
 	 * @return Product found or null
 	 */
-	public static Product searchName(String name) { //move to database
+	public static Product searchName(String name) { // move to database
 		Product n = new Product(name, "");
 		return itemsName.search(n, new nameComparator());
 	}
@@ -261,13 +261,14 @@ public class Product {
 	 * @param type the type of the product
 	 * @return the Product found or null
 	 */
-	public static Product searchType(String type) { //move to database
+	public static Product searchType(String type) { // move to database
 		Product t = new Product("", type);
 		return itemsType.search(t, new typeComparator());
 	}
 
 	/**
-	 *Add a new product to the BST
+	 * Add a new product to the BST
+	 * 
 	 * @param p Product to remove
 	 */
 	public void addProduct(Product p) {
@@ -277,6 +278,7 @@ public class Product {
 
 	/**
 	 * Removes a new product to the BST
+	 * 
 	 * @param p Product to add
 	 */
 	public void removeProduct(Product p) {
