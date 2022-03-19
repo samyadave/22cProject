@@ -428,6 +428,7 @@ public class UserInterface {
     /**
      * 
      */
+
     private void managerAddProd() {
         System.out.print("Enter the name of the product: ");
         String pname = input.nextLine();
@@ -470,6 +471,7 @@ public class UserInterface {
     /**
      * 
      */
+
     private void managerUpdateProd() {
         int search = 0;
         System.out.print("Enter the name of the product: ");
