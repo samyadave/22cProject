@@ -9,18 +9,11 @@
  */
 package OrderUtil;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-
-import org.junit.jupiter.params.shadow.com.univocity.parsers.conversions.ShortConversion;
-import org.junit.platform.console.shadow.picocli.CommandLine.Help.Column.Overflow;
-
 import ProductUtil.Product;
 import UserUtil.Customer;
 import UserUtil.LinkedList;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.LocalDateTime;
 
 /**
  * Orders are made in the shopping cart, however
@@ -62,20 +55,55 @@ public class Order {
     }
 
     // orderContents
-    public Order(int orderID, Customer customer, String date, ShippingSpeed shippingSpeed) {
-        orderID = this.orderID;
-        customer = this.customer;
-        date = LocalDate.now().toString();
+    public Order(int orderID, Customer customer, ShippingSpeed shippingSpeed) {
+        this.orderID = orderID;
+        this.customer = customer;
+        this.date = LocalDate.now().toString();
         // orderContents = new LinkedList<>(o); // copies o onto the orderContents
-        shippingSpeed = this.shippingSpeed;
-        priority = this.calculatePriority(shippingSpeed);
+        this.shippingSpeed = shippingSpeed;
+        this.priority = calculatePriority(shippingSpeed);
         orderContents = new LinkedList<>();
+    }
 
+    public Order(Customer customer) {
+        this(-1, customer, null);
+    }
+
+    public Order(int orderID) {
+        this(orderID, null, null);
+    }
+
+    /**
+     * Remove's one stock from the product
+     */
+    public void removeStock() {
+        orderContents.positionIterator();
+        while (!orderContents.offEnd()) {
+            int quant = orderContents.getIterator().getQuantity();
+            orderContents.getIterator().updateNumInStock(quant - 1);
+            orderContents.advanceIterator();
+        }
+    }
+
+    public boolean contains(Product p) {
+        orderContents.positionIterator();
+        while (!orderContents.offEnd()) {
+            if (orderContents.getIterator().equals(p)) {
+                return true;
+            }
+            orderContents.advanceIterator();
+        }
+
+        return false;
     }
 
     /** GETTERS/ACCESSORS */
     public int getOrderID() {
         return orderID;
+    }
+
+    public boolean isEmpty() {
+        return orderContents.isEmpty();
     }
 
     public void addProduct(Product p) {
@@ -140,10 +168,9 @@ public class Order {
     }
 
     public double getPrice() {
-
         orderContents.positionIterator();
         while (!orderContents.offEnd()) {
-            price += orderContents.getIterator().getPrice();
+            price += orderContents.getIterator().getPrice() * orderContents.getIterator().getQuantity();
             orderContents.advanceIterator();
         }
 
@@ -156,6 +183,19 @@ public class Order {
         }
 
         return price;
+    }
+
+    public String productString() {
+        String res = "";
+        orderContents.positionIterator();
+        while (!orderContents.offEnd()) {
+            res += String.format("\n\tName: %s\n\tPrice: %.2f\n\tQuantity: %d", orderContents.getIterator().getName(),
+                    orderContents.getIterator().getPrice() * orderContents.getIterator().getQuantity(),
+                    orderContents.getIterator().getQuantity());
+            orderContents.advanceIterator();
+        }
+
+        return res + "\n";
     }
 
     @Override
@@ -181,16 +221,53 @@ public class Order {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true; // compares memory address
-        } else if (!(o instanceof Order)) {
-            return false; // makes sure comparing 2 of same type
-        } else {
-            Order p = (Order) o;
-            return this.getOrderID() == p.getOrderID() && this.getCustomer().equals(p.getCustomer()) &&
-                    getDate().equalsIgnoreCase(p.getDate()) && (this.getShippingSpeed() == p.getShippingSpeed())
-                    && this.getPriority() == p.getPriority();
-        }
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Order other = (Order) obj;
+        if (customer == null) {
+            if (other.customer != null)
+                return false;
+        } else if (!customer.equals(other.customer))
+            return false;
+        if (date == null) {
+            if (other.date != null)
+                return false;
+        } else if (!date.equals(other.date))
+            return false;
+        if (orderContents == null) {
+            if (other.orderContents != null)
+                return false;
+        } else if (!orderContents.equals(other.orderContents))
+            return false;
+        if (orderID != other.orderID)
+            return false;
+        if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
+            return false;
+        if (priority != other.priority)
+            return false;
+        if (shippingSpeed != other.shippingSpeed)
+            return false;
+        return true;
     }
+
+    // @Override
+    // public boolean equals(Object o) {
+    // if (this == o) {
+    // return true; // compares memory address
+    // } else if (!(o instanceof Order)) {
+    // return false; // makes sure comparing 2 of same type
+    // } else {
+    // Order p = (Order) o;
+    // return this.getOrderID() == p.getOrderID() &&
+    // this.getCustomer().equals(p.getCustomer()) &&
+    // getDate().equalsIgnoreCase(p.getDate()) && (this.getShippingSpeed() ==
+    // p.getShippingSpeed())
+    // && this.getPriority() == p.getPriority();
+    // }
+    // }
 }

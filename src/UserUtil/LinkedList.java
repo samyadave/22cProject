@@ -1,4 +1,5 @@
 package UserUtil;
+
 /**
  * LinkedList.java
  * @author Meigan Lu
@@ -309,15 +310,11 @@ public class LinkedList<T> {
     /**
      * places the iterator at the first node
      * 
-     * @precondition length != 0
+     *
      * @postcondition iterator placed on first node
      * @throws NullPointerException when length = 0
      */
-    public void positionIterator() throws NullPointerException {
-        if (this.length == 0) {
-            throw new NullPointerException("positionIterator(): Cannot position onto empty list.");
-        }
-
+    public void positionIterator() {
         this.iterator = this.first;
     }
 

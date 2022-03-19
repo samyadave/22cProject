@@ -15,16 +15,19 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
 
 import OrderUtil.Heap;
 import OrderUtil.Order;
+import OrderUtil.Order.ShippingSpeed;
 import ProductUtil.BST;
 import ProductUtil.Product;
 import UserUtil.Customer;
 import UserUtil.Employee;
 import UserUtil.HashTable;
+import UserUtil.LinkedList;
 import UserUtil.User;
 
 /**
@@ -37,8 +40,7 @@ public class Database {
     private static HashTable<String> credentials = new HashTable<>(100);
     private static BST<Product> itemsName = new BST<>();
     private static BST<Product> itemsType = new BST<>();
-    private static Heap<Order> orders = new Heap<>(10);
-    // TODO: Update with ur newconstructor
+    private static Heap<Order> orders = new Heap<>(100);
 
     public static User loggedIn;
 
@@ -141,9 +143,17 @@ public class Database {
      */
     public static void startUp() {
         populateCatalogue();
-        // populateOrders();
+        populateOrders();
+
         populateCustomers();
         populateEmployees();
+    }
+
+    private static void populateOrders() {
+
+        orders.insert(new Order(10012, new Customer("firstName", "lastName", "login", "password", "address",
+                "city", "state",
+                "2222"), ShippingSpeed.OVERNIGHT), new PriorityComparator());
     }
 
     /**
@@ -356,6 +366,81 @@ public class Database {
         return itemsType.search(t, new NameComparator());
     }
 
+    public static Order viewOrderHighestPri() {
+        return orders.getMin();
+    }
+
+    public static String viewingOrdersbyHighestPri() {
+        return orders.toString();
+    }
+
+    public static Order searchID(int orderID) {
+        Order o = new Order(orderID);
+        return orders.search(o, new IDComparator());
+    }
+
+    /**
+     * Inserts an order into the order heap
+     * 
+     * @param o
+     */
+    public static void addOrder(Order o) {
+        orders.insert(o, new PriorityComparator());
+    }
+
+    /*
+     * ﾊ,,ﾊ
+     * （ ﾟωﾟ ) No Thank You
+     * ／ ＼
+     * ((⊂ ） ﾉ＼つ))
+     * （＿⌒ヽ
+     * ヽ ﾍ }
+     * 
+     * ε≡Ξ ﾉノ ｀J
+     */
+    // line 501
+
+    /**
+     * Ships an order from orderID
+     * and removes from order heap
+     * 
+     * @param orderId
+     */
+    public static void shipOrder(int orderId) {
+        Order o = orders.search(new Order(orderId), new IDComparator());
+
+        o.getCustomer().shipOrder(orderId);
+        orders.remove(orders.getIndex(new Order(orderId), new IDComparator()), new IDComparator());
+    }
+
+    /**
+     * Adds the shopping cart to the heap,
+     * resets it, and puts it into
+     * Customer's unshipped orders
+     * 
+     */
+    public static void placeOrder(Order o, Customer c) {
+        orders.insert(o, new PriorityComparator());
+        c.addUnshippedOrders(o);
+    }
+
+    /**
+     * 
+     * @param customer
+     * @return
+     */
+    public static ArrayList<LinkedList<Order>> searchOrderCust(Customer customer) {
+        Order o = orders.search(new Order(customer), new CustomerComparator());
+
+        if (o != null) {
+            ArrayList<LinkedList<Order>> arr = new ArrayList<>();
+            arr.add(o.getCustomer().getUnshippedOrders());
+            arr.add(o.getCustomer().getShippedOrders());
+            return arr;
+        }
+        return null;
+    }
+
 }
 
 /**
@@ -395,5 +480,46 @@ class TypeComparator implements Comparator<Product> {
             return 0;
         }
         return p1.getType().compareTo(p2.getType());
+    }
+}
+
+/**
+ * Comparator for Heap class
+ */
+class PriorityComparator implements Comparator<Order> {
+    @Override
+    public int compare(Order p1, Order p2) {
+        if (p1.equals(p2)) {
+            return 0;
+        }
+        return Integer.compare(p1.getPriority(), (p2.getPriority()));
+    }
+}
+
+/**
+ * Comparator for Heap class
+ */
+class CustomerComparator implements Comparator<Order> {
+
+    @Override
+    public int compare(Order o1, Order o2) {
+        if (o1.equals(o2)) {
+            return 0;
+        }
+        return o1.getCName().compareTo(o2.getCName());
+    }
+}
+
+/**
+ * Comparator for Heap class
+ */
+class IDComparator implements Comparator<Order> {
+
+    @Override
+    public int compare(Order o1, Order o2) {
+        if (o1.equals(o2)) {
+            return 0;
+        }
+        return Integer.compare(o1.getOrderID(), o2.getOrderID());
     }
 }

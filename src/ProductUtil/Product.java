@@ -22,52 +22,9 @@ public class Product {
 	private double price;
 	private String description;
 	private int numInStock;
+	private int quantity;
 	private static BST<Product> itemsName = new BST<>();
 	private static BST<Product> itemsType = new BST<>();
-
-	/**
-	 * populate the store with products from Catalogue
-	 * 
-	 * @param input Scanner
-	 * 
-	 */
-	public static void populateCatalogue() { // in database or no?
-		try {
-			Scanner input = new Scanner(new File("./src/Database/Catalogue.txt"));
-			String name = "";
-			String type = "";
-			int calories = 0;
-			String bestby = "";
-			double price = 0.0;
-			String description = "";
-			int numInStock = 0;
-
-			while (input.hasNextLine()) {
-				name = input.nextLine();
-				type = input.nextLine();
-				calories = input.nextInt();
-				input.nextLine();
-				bestby = input.nextLine();
-				price = input.nextDouble();
-				input.nextLine();
-				description = input.nextLine();
-				numInStock = input.nextInt();
-
-				if (input.hasNextLine()) {
-					input.nextLine();
-					input.nextLine();
-				}
-
-				Product p = new Product(name, type, calories, bestby, price, description, numInStock);
-				itemsName.insert(p, new nameComparator());
-				itemsType.insert(p, new typeComparator());
-
-			}
-		} catch (IOException e) {
-			// TODO: handle exception
-		}
-
-	}// populateCatalogue()
 
 	/**
 	 * Default constructor for Product. Calls the 7 argument constructor
@@ -211,6 +168,22 @@ public class Product {
 	}
 
 	/**
+	 * 
+	 * @return
+	 */
+	public int getQuantity() {
+		return quantity;
+	}
+
+	/**
+	 * 
+	 * @param quantity
+	 */
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	/**
 	 * Overrides equals for Object using the formula given in class. we will
 	 * consider two cards to be equal on the basis of name and type only
 	 * 
@@ -271,7 +244,7 @@ public class Product {
 	 * 
 	 * @param p Product to remove
 	 */
-	public void addProduct(Product p) {
+	public static void addProduct(Product p) {
 		itemsName.insert(p, new nameComparator());
 		itemsType.insert(p, new typeComparator());
 	}
@@ -281,7 +254,7 @@ public class Product {
 	 * 
 	 * @param p Product to add
 	 */
-	public void removeProduct(Product p) {
+	public static void removeProduct(Product p) {
 		itemsName.remove(p, new nameComparator());
 		itemsType.remove(p, new typeComparator());
 	}
@@ -307,5 +280,49 @@ public class Product {
 				+ "\nNum in Stock: " + getNumInStock() + "\n";
 
 	}
+
+	/**
+	 * populate the store with products from Catalogue
+	 * 
+	 * @param input Scanner
+	 * 
+	 */
+	public static void populateCatalogue() { // in database or no?
+		try {
+			Scanner input = new Scanner(new File("./src/Database/Catalogue.txt"));
+			String name = "";
+			String type = "";
+			int calories = 0;
+			String bestby = "";
+			double price = 0.0;
+			String description = "";
+			int numInStock = 0;
+
+			while (input.hasNextLine()) {
+				name = input.nextLine();
+				type = input.nextLine();
+				calories = input.nextInt();
+				input.nextLine();
+				bestby = input.nextLine();
+				price = input.nextDouble();
+				input.nextLine();
+				description = input.nextLine();
+				numInStock = input.nextInt();
+
+				if (input.hasNextLine()) {
+					input.nextLine();
+					input.nextLine();
+				}
+
+				Product p = new Product(name, type, calories, bestby, price, description, numInStock);
+				itemsName.insert(p, new nameComparator());
+				itemsType.insert(p, new typeComparator());
+
+			}
+		} catch (IOException e) {
+			// TODO: handle exception
+		}
+
+	}// populateCatalogue()
 
 }

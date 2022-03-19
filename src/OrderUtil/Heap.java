@@ -22,7 +22,10 @@ public class Heap<T> {
 
     public Heap(int size) {
         this.heap = new ArrayList<>(size);
-        this.heapSize = size;
+        for (int i = 0; i < size; i++) {
+            heap.add(null);
+        }
+        this.heapSize = 0;
     }
 
     /**
@@ -36,7 +39,7 @@ public class Heap<T> {
      */
     public Heap(ArrayList<T> data, Comparator<T> comparator) { // still idk
         heap = new ArrayList<>(data);
-        heapSize = data.size();
+        heapSize = 0;
         buildHeap(comparator);
     }
 
@@ -90,8 +93,12 @@ public class Heap<T> {
      * @param key the data to insert
      */
     public void insert(T key, Comparator<T> comparator) {
+        if (heapSize == 0) {
+            heap.set(1, key);
+        } else {
+            heapifyUp(heapSize, key, comparator);
+        }
         heapSize++; // need or no need?
-        heapifyUp(heapSize, key, comparator);
     }
 
     /**
@@ -102,10 +109,10 @@ public class Heap<T> {
      * @precondition
      */
     private void heapifyUp(int index, T key, Comparator<T> comparator) {
-        heap.add(key);
+        heap.set(index + 1, key);
         int indexMin = getParent(index);
 
-        if (hasParent(index) && (comparator.compare(key, getElement(indexMin)) < 0)) {
+        if (hasParent(index) && (comparator.compare(key, heap.get(indexMin)) < 0)) {
             T temp = getElement(indexMin);
             heap.set(indexMin, key);
             heap.set(index, temp);
@@ -146,6 +153,9 @@ public class Heap<T> {
      * @return the max value
      */
     public T getMin() {
+        if (heapSize == 0) {
+            return null;
+        }
         return heap.get(1);
     }
 
@@ -215,6 +225,15 @@ public class Heap<T> {
         return right != null;
     }
 
+    public int getIndex(T data, Comparator<T> comparator) {
+        for (int i = 1; i <= heapSize; i++) {
+            if (comparator.compare(heap.get(i), data) == 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     /**
      * returns the heap size (current number of elements)
      * 
@@ -239,14 +258,15 @@ public class Heap<T> {
         if (index < 0 || index > heapSize) {
             throw new IndexOutOfBoundsException("getElement: Index out of bounds!");
         }
+
         return heap.get(index);
     }
 
     /** Additional Operations */
 
-    public T search(T data, Comparator<T> comparator) throws NullPointerException {
+    public T search(T data, Comparator<T> comparator) {
         if (isEmpty()) {
-            throw new NullPointerException("search(): No elements to search for!");
+            return null;
         } else {
             int index = 1;
             return search(data, index, comparator);
@@ -254,10 +274,12 @@ public class Heap<T> {
     }
 
     private T search(T data, int index, Comparator<T> comparator) {
-
-        if (comparator.compare(data, getElement(index)) == 0) {
-            return data;
-        } else if (comparator.compare(data, getElement(index)) < 0) {
+        if (heap.get(index) == null) {
+            return null;
+        }
+        if (comparator.compare(data, heap.get(index)) == 0) {
+            return heap.get(index);
+        } else if (comparator.compare(data, heap.get(index)) < 0) {
             if (!hasLeft(index)) {
                 return null;
             } else {
@@ -278,8 +300,8 @@ public class Heap<T> {
     @Override
     public String toString() {
         String str = "";
-        for (int i = 0; i <= heapSize; i++) {
-            str += "Order #" + i + ": " + getElement(i) + "\n";
+        for (int i = 1; i <= heapSize; i++) {
+            str += heap.get(i) != null ? heap.get(i).toString() : "null";
         }
         return str;
     }
@@ -296,36 +318,4 @@ public class Heap<T> {
         return new ArrayList<T>();
     }
 
-}
-
-class PriorityComparator implements Comparator<Order> {
-    @Override
-    public int compare(Order p1, Order p2) {
-        if (p1.equals(p2)) {
-            return 0;
-        }
-        return Integer.compare(p1.getPriority(), (p2.getPriority()));
-    }
-}
-
-class CustomerComparator implements Comparator<Order> {
-
-    @Override
-    public int compare(Order o1, Order o2) {
-        if (o1.equals(o2)) {
-            return 0;
-        }
-        return o1.getCName().compareTo(o2.getCName());
-    }
-}
-
-class IDcomparator implements Comparator<Order> {
-
-    @Override
-    public int compare(Order o1, Order o2) {
-        if (o1.equals(o2)) {
-            return 0;
-        }
-        return Integer.compare(o1.getOrderID(), o2.getOrderID());
-    }
 }

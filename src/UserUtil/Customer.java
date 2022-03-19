@@ -4,12 +4,13 @@ import OrderUtil.Order;
 
 /**
  * Customer.java
+ * 
  * @author Meigan Lu
  * @author Eileen Huynh
  * @author Sol Valdimarsdottir
  * @author Sam Yadav
  * @author Brandon Ho
- * CIS 22C Course Project
+ *         CIS 22C Course Project
  */
 
 public class Customer extends User {
@@ -100,7 +101,6 @@ public class Customer extends User {
 
     public void addShippedOrders(Order shippedOrder) {
         this.shippedOrders.addLast(shippedOrder);
-
     }
 
     public LinkedList<Order> getUnshippedOrders() {
