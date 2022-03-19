@@ -193,15 +193,18 @@ public class Heap<T> {
      * @throws IndexOutOfBoundsException
      */
     public int getLeft(int index) throws IndexOutOfBoundsException {
-        if (index > heapSize || index <= 0) {
+        if (index > heap.size() || index <= 0) {
             throw new IndexOutOfBoundsException("getLeft(): index out of bounds!");
         }
         return index + index;
     }
 
     public boolean hasLeft(int index) {
-        T left = getElement(index);
-        return left != null;
+        if (2 * index < heap.size()) {
+            return heap.get(2 * index) != null;
+        }
+
+        return false;
     }
 
     /**
@@ -221,8 +224,11 @@ public class Heap<T> {
     }
 
     public boolean hasRight(int index) {
-        T right = getElement(index);
-        return right != null;
+        if (2 * index + 1 < heap.size()) {
+            return heap.get(2 * index + 1) != null;
+        }
+
+        return false;
     }
 
     public int getIndex(T data, Comparator<T> comparator) {
@@ -301,7 +307,7 @@ public class Heap<T> {
     public String toString() {
         String str = "";
         for (int i = 1; i <= heapSize; i++) {
-            str += heap.get(i) != null ? heap.get(i).toString() : "null";
+            str += heap.get(i) != null ? heap.get(i).toString() : "";
         }
         return str;
     }

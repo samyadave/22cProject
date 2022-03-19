@@ -320,7 +320,7 @@ public class Product {
 
 			}
 		} catch (IOException e) {
-			// TODO: handle exception
+			System.out.println(e);
 		}
 
 	}// populateCatalogue()

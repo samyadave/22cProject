@@ -11,13 +11,11 @@
 
 import Database.Database;
 import ProductUtil.Product;
-import UserUtil.Employee;
 
 public class MegaMart {
     public static void main(String[] args) {
         Database.startUp();
         Product.populateCatalogue();
-        Database.addUser(new Employee("firstName", "lastName", "yayayay", "password", false));
         UserInterface u = new UserInterface();
         u.run();
     }

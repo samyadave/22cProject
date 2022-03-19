@@ -31,37 +31,40 @@ public class UserInterface {
     private static ArrayList<String> log = new ArrayList<String>(); // for the employee
     private static int receiptNum = 1;
     private Order shoppingCart = new Order();
-
-    public UserInterface() {
-
-    }
+    private boolean firstRun = false;
 
     /**
-     * Welcome user and initialize user information
+     * Welcome user and initialize user information.
+     * Takes in user choice and calls the appropriate
+     * function to handle
      */
     public void run() {
-        System.out.println(
-                "                                                                               $$\\     \n" +
-                        "                                                                               $$ |    \n"
-                        +
-                        "$$$$$$\\$$$$\\   $$$$$$\\   $$$$$$\\   $$$$$$\\  $$$$$$\\$$$$\\   $$$$$$\\   $$$$$$\\ $$$$$$\\   \n"
-                        +
-                        "$$  _$$  _$$\\ $$  __$$\\ $$  __$$\\  \\____$$\\ $$  _$$  _$$\\  \\____$$\\ $$  __$$\\\\_$$  _|  \n"
-                        +
-                        "$$ / $$ / $$ |$$$$$$$$ |$$ /  $$ | $$$$$$$ |$$ / $$ / $$ | $$$$$$$ |$$ |  \\__| $$ |    \n"
-                        +
-                        "$$ | $$ | $$ |$$   ____|$$ |  $$ |$$  __$$ |$$ | $$ | $$ |$$  __$$ |$$ |       $$ |$$\\ \n"
-                        +
-                        "$$ | $$ | $$ |\\$$$$$$$\\ \\$$$$$$$ |\\$$$$$$$ |$$ | $$ | $$ |\\$$$$$$$ |$$ |       \\$$$$  |\n"
-                        +
-                        "\\__| \\__| \\__| \\_______| \\____$$ | \\_______|\\__| \\__| \\__| \\_______|\\__|        \\____/ \n"
-                        +
-                        "                        $$\\   $$ |                                                     \n"
-                        +
-                        "                        \\$$$$$$  |                                                     \n"
-                        +
-                        "                         \\______/                                                      \n");
-        System.out.println("Established 1987");
+        if (firstRun == false) {
+            firstRun = true;
+            System.out.println(
+                    "                                                                               $$\\     \n" +
+                            "                                                                               $$ |    \n"
+                            +
+                            "$$$$$$\\$$$$\\   $$$$$$\\   $$$$$$\\   $$$$$$\\  $$$$$$\\$$$$\\   $$$$$$\\   $$$$$$\\ $$$$$$\\   \n"
+                            +
+                            "$$  _$$  _$$\\ $$  __$$\\ $$  __$$\\  \\____$$\\ $$  _$$  _$$\\  \\____$$\\ $$  __$$\\\\_$$  _|  \n"
+                            +
+                            "$$ / $$ / $$ |$$$$$$$$ |$$ /  $$ | $$$$$$$ |$$ / $$ / $$ | $$$$$$$ |$$ |  \\__| $$ |    \n"
+                            +
+                            "$$ | $$ | $$ |$$   ____|$$ |  $$ |$$  __$$ |$$ | $$ | $$ |$$  __$$ |$$ |       $$ |$$\\ \n"
+                            +
+                            "$$ | $$ | $$ |\\$$$$$$$\\ \\$$$$$$$ |\\$$$$$$$ |$$ | $$ | $$ |\\$$$$$$$ |$$ |       \\$$$$  |\n"
+                            +
+                            "\\__| \\__| \\__| \\_______| \\____$$ | \\_______|\\__| \\__| \\__| \\_______|\\__|        \\____/ \n"
+                            +
+                            "                        $$\\   $$ |                                                     \n"
+                            +
+                            "                        \\$$$$$$  |                                                     \n"
+                            +
+                            "                         \\______/                                                      \n");
+
+            System.out.println("Established 1987");
+        }
         System.out.printf("%s\n\t%s\n\t%s\n\t%s\n\t%s\n%s", "Welcome to MegaMart!", "Choose an option:", "1. Sign in",
                 "2. Sign up", "3. Continue as guest", "Enter choice: ");
         int choice = input.nextInt();
@@ -84,9 +87,9 @@ public class UserInterface {
      */
     public void signIn() {
         System.out.print("Enter your username: ");
-        String username = input.next();
+        String username = input.nextLine();
         System.out.print("Enter your password: ");
-        String password = input.next();
+        String password = input.nextLine();
 
         Status t = Database.login(username, password);
 
@@ -114,21 +117,21 @@ public class UserInterface {
      */
     public void signUp() {
         System.out.print("Enter your first name:");
-        String firstName = input.next();
+        String firstName = input.nextLine();
         System.out.print("Enter your last name:");
-        String lastName = input.next();
+        String lastName = input.nextLine();
         System.out.print("Enter your username:");
-        String email = input.next();
+        String email = input.nextLine();
         System.out.print("Enter your password:");
-        String password = input.next();
+        String password = input.nextLine();
         System.out.print("Enter your street address:");
-        String address = input.next();
+        String address = input.nextLine();
         System.out.print("Enter your city:");
-        String city = input.next();
+        String city = input.nextLine();
         System.out.print("Enter your state:");
-        String state = input.next();
+        String state = input.nextLine();
         System.out.print("Enter your ZIP code:");
-        String zip = input.next();
+        String zip = input.nextLine();
         Status added = Database.addUser(new Customer(firstName, lastName, email, password, address, city, state, zip));
         switch (added) {
             case Success:
@@ -149,27 +152,31 @@ public class UserInterface {
      */
     public synchronized void customerMenu(Customer cust) {
         String choice = "";
-        System.out.printf("\nWelcome to MegaMart%s!\n", ", " + cust.getFirstName() == null ? cust.getFirstName() : "");
         try {
-            System.out.println("Loading...");
+            System.out.println("Loading...\n");
             wait(1000);
         } catch (Exception e) {
             System.out.println(e);
         }
+        System.out.printf("\nWelcome to MegaMart%s!\n", ", " + cust.getFirstName() + cust.getLastName());
 
         while (!choice.equalsIgnoreCase("X")) {
+            String s = shoppingCart.isEmpty() ? "" : "\n\tF. Edit Cart";
             System.out.println("\tMenu: " + "\n\tA. Search for Product" + "\n\tB. Display Database of Products"
                     + "\n\tC. Place an Order"
-                    + "\n\tD. View your Shopping Cart" + "\n\tE. View Purchases" + "\n\tX. Exit\n\tY. Logout\n");
+                    + "\n\tD. View your Shopping Cart" + "\n\tE. View Purchases" + s + "\n\tX. Exit\n\tY. Logout\n");
             System.out.print("\nPlease select from one of the options: ");
-            choice = input.next(); // taking in choices from menu
+            choice = input.nextLine(); // taking in choices from menu
             if (choice.equalsIgnoreCase("Y")) {
-                run();
+                break;
             }
             handleCustomerChoice(choice, cust);
         }
         System.out.println("Logging out... Goodbye!\nHead over to Receipt.txt to view your order information.");
         printReceipt(receipt);
+        if (choice.equalsIgnoreCase("y")) {
+            run();
+        }
 
     }
 
@@ -178,23 +185,30 @@ public class UserInterface {
      * 
      * @param emp usr position
      */
-    public void employeeMenu(Employee emp) { // looks good
+    public synchronized void employeeMenu(Employee emp) { // looks good
         String choice = "";
 
-        System.out.printf("Welcome, %s!", emp.getFirstName());
+        try {
+            System.out.println("Loading...\n");
+            wait(1000);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        System.out.printf("Welcome, %s %s!", emp.getFirstName(), emp.getLastName());
         while (!choice.equalsIgnoreCase("X")) {
             System.out.println("\n\tMenu:");
             System.out.printf("\t%s\n\t%s\n\t%s\n\t%s", "A. Search for an order",
-                    "B. View order with highest priority", "C. View all orders", "D. Ship order, Y. Logout");
+                    "B. View order with highest priority", "C. View all orders", "D. Ship order");
             if (emp.isManager()) {
                 System.out.println("\n\tE. Update Products Catalogue By Primary Key ");
             }
 
+            System.out.println("\tY. Logout");
             System.out.println("\tX. Quit");
             System.out.print("Please select from one of the options: ");
-            choice = input.next(); // taking in choices from menu
+            choice = input.nextLine(); // taking in choices from menu
             if (choice.equalsIgnoreCase("Y")) {
-                run();
+                break;
             }
             if (choice.equalsIgnoreCase("E")) {
                 handleManagerChoice(choice);
@@ -202,8 +216,11 @@ public class UserInterface {
                 handleEmployeeChoice(choice);
             }
         }
-        System.out.println("Logging out... Goodbye!\nHead over to Receipt.txt to view your activity log.");
+        System.out.println("Logging out... Goodbye!\n");
         printLog(log);
+        if (choice.equalsIgnoreCase("Y")) {
+            run();
+        }
     }
 
     /**
@@ -223,8 +240,43 @@ public class UserInterface {
             displayCart();
         } else if (choice.equalsIgnoreCase("E")) {// view purchases
             customerViewPurchases(cust);
+        } else if (choice.equalsIgnoreCase("F") && !shoppingCart.isEmpty()) {
+            editCart();
         } else if (!choice.equalsIgnoreCase("X")) {
             System.out.println("\nInvalid option!"); // change to loop
+        }
+    }
+
+    /**
+     * Option f in Customer menu.
+     * Allows customer to edit items
+     * in their cart
+     */
+    private void editCart() {
+        displayCart();
+        System.out.println("Enter the name of the item you would like to edit: ");
+        String choice = input.nextLine();
+        if (shoppingCart.contains(choice)) {
+            Product p = Product.searchName(choice);
+            System.out.println("A. Change quantity\nB. Remove item");
+            choice = input.nextLine();
+            if (choice.equalsIgnoreCase("a")) {
+                System.out.println("Enter new quantity: ");
+                choice = input.nextLine();
+                if (Integer.valueOf(choice) < p.getNumInStock() && Integer.valueOf(choice) > 0) {
+                    p.setQuantity(Integer.valueOf(choice));
+                    System.out.println("Quantity updated!");
+                    displayCart();
+                } else {
+                    System.out.println("Unable to update quantity.");
+                }
+            } else if (choice.equalsIgnoreCase("b")) {
+                shoppingCart.removeItem(p);
+                System.out.println("Item removed!");
+                displayCart();
+            }
+        } else {
+            System.out.println("Invalid item name.");
         }
     }
 
@@ -238,7 +290,7 @@ public class UserInterface {
         String ptype, pname, search;
         System.out.print("Search by:\n\tA. Name\n\tB. Product type");
         System.out.print("\nPlease select from one of the options: ");
-        search = input.next();
+        search = input.nextLine();
         if (search.equalsIgnoreCase("A")) {
             input.nextLine();
             System.out.print("Enter the name of the product you wish to search for: ");
@@ -253,7 +305,7 @@ public class UserInterface {
         } else if (search.equalsIgnoreCase("B")) {
             System.out.println("Types:\n\tBakery\n\tDairy\n\tMeat\n\tSnacks\n\tProduce");
             System.out.print("Enter the type of product: ");
-            ptype = input.next();
+            ptype = input.nextLine();
             Product tfound = Product.searchType(ptype);
             if (tfound != null) {
                 System.out.println("One record of requested product found by type: \n" + tfound.toString());
@@ -267,19 +319,22 @@ public class UserInterface {
     }
 
     /**
+     * Handles adding a product with specific
+     * quantity to the shopping cart after
+     * user searches for a product
      * 
      * @param p
      */
     private void addToCart(Product p) {
         System.out.println("Add to cart (y/n)?");
-        String add = input.next();
+        String add = input.nextLine();
         if (add.equalsIgnoreCase("y")) {
             System.out.println("Enter quantity: ");
-            String quantity = input.next();
+            String quantity = input.nextLine();
             while (Integer.valueOf(quantity) >= p.getNumInStock() && !quantity.equalsIgnoreCase("X")) {
                 System.out.println("Not enough stock, please try again.");
                 System.out.println("Enter quantity: (X to return to menu)");
-                quantity = input.next();
+                quantity = input.nextLine();
             }
             if (!quantity.equalsIgnoreCase("X")) {
                 if (shoppingCart.contains(p)) {
@@ -327,20 +382,21 @@ public class UserInterface {
                     "2. Rush: 4500 BruhCoins ($0.04)",
                     "3. Standard: 100 BruhCoins ($0.001)");
             System.out.print("Select shipping speed: ");
-            String ship = input.next();
+            String ship = input.nextLine();
             ShippingSpeed s = ship.equals("1") ? ShippingSpeed.OVERNIGHT
                     : ship.equals("2") ? ShippingSpeed.RUSH
                             : ship.equals("3") ? ShippingSpeed.STANDARD : null;
             shoppingCart.changeShippingSpeed(s);
             System.out.printf("Total price is: $%.2f\n", shoppingCart.getPrice());
             System.out.println("Continue to checkout? (y/n)");
-            ship = input.next();
+            ship = input.nextLine();
             if (ship.equalsIgnoreCase("y")) {
                 System.out.println("Enter payment information: ");
-                ship = input.next();
+                ship = input.nextLine();
                 System.out.println("Place order? (y/n)");
-                ship = input.next();
+                ship = input.nextLine();
                 if (ship.equalsIgnoreCase("y")) {
+                    cust.addUnshippedOrders(shoppingCart);
                     Database.placeOrder(shoppingCart, cust);
                     shoppingCart = new Order();
                 }
@@ -373,14 +429,14 @@ public class UserInterface {
      */
     private void customerViewPurchases(Customer cust) {
         if (cust.getUnshippedOrders().getLength() == 0) {
-            System.out.println("No unshipped orders");
+            System.out.println("No unshipped orders\n");
         } else {
             System.out.println("Unshipped orders:");
             System.out.println(cust.getUnshippedOrders());
         }
 
         if (cust.getShippedOrders().getLength() == 0) {
-            System.out.println("No shipped orders");
+            System.out.println("No shipped orders\n");
         } else {
             System.out.println("Shipped orders:");
             System.out.println(cust.getShippedOrders());
@@ -388,12 +444,8 @@ public class UserInterface {
     }
 
     /**
-     * MANAGER - MANAGER
-     * MANAGER - MANAGER
-     * MANAGER - MANAGER
-     * MANAGERRRRRR
-     * MANAGER - MANAGER
-     * THIS IS THE MANAGERRRRRR
+     * Takes in user input and handles the
+     * appropriate function call
      * 
      * @param choice from menu option
      */
@@ -405,7 +457,7 @@ public class UserInterface {
                     + "\n\tB. Update an Existing Product Price, Description or Add More to Stock"
                     + "\n\tC. Remove a Product" + "\n\tD. Display All Products");
             System.out.print("Please select from one of the options: ");
-            option = input.next();
+            option = input.nextLine();
             input.nextLine();
             if (option.equalsIgnoreCase("A")) {
                 managerAddProd();
@@ -426,6 +478,8 @@ public class UserInterface {
     }
 
     /**
+     * Option A in manager menu.
+     * Adds new product to catalogue
      * 
      */
 
@@ -463,12 +517,14 @@ public class UserInterface {
             Product.addProduct(add);
 
             System.out.print(add.toString());
-            log.add("New product added: \nName: " + pname + "\nType: " + ptype);
+            log.add("New product added: \nName: " + pname);
 
         }
     }
 
     /**
+     * Option B in manager menu.
+     * Updates an existing product
      * 
      */
 
@@ -520,6 +576,8 @@ public class UserInterface {
     }
 
     /**
+     * Option C in manager menu.
+     * Removes a product from the catalogue
      * 
      */
     private void managerRemoveProduct() {
@@ -538,25 +596,9 @@ public class UserInterface {
         }
     }
 
-    /*
-     * 
-     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-     * ░░░░█▀▀▀░█▀▀▀░░█▀▀░▀▀█░░█░░░░
-     * ░░░░█░▀█░█░▀█░░█▀▀░▄▀░░░▀░░░░
-     * ░░░░▀▀▀▀░▀▀▀▀░░▀▀▀░▀▀▀░░▀░░░░
-     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-     * 
-     */
-
     /**
-     * EMPLOYEE - EMPLOYEE EMPLOYEE - EMPLOYEE EMPLOYEE - EMPLOYEE EMPLOYEE -
-     * EMPLOYE EEMPLOYEE - EMPLOYEE EMPLOYEE - EMPLOYEE
-     * EMPLOYEE - EMPLOYEE EMPLOYEE - EMPLOYEE EMPLOYEE - EMPLOYEE EMPLOYEE -
-     * EMPLOYEE EMPLOYEE - EMPLOYEE EMPLOYEE - EMPLOYEE
-     * EMPLOYEE - EMPLOYEE EMPLOYEE - EMPLOYEE EMPLOYEE - EMPLOYEE EMPLOYEE -
-     * EMPLOYEEEMPLOYEE - EMPLOYEE EMPLOYEE - EMPLOYEE EMPLOYEE - EMPLOYEE
-     * THIS IS THE EMPLOYEEeeeeEEEE
-     * 
+     * Handles user input with appropriate
+     * method calls
      * 
      * 
      * @param choice from menu option
@@ -566,25 +608,19 @@ public class UserInterface {
             employeeSearchOrder();
         } else if (choice.equalsIgnoreCase("B")) { // view order w/ highest priority
             System.out.println("Order with Highest Priority: ");
-            Order o = Database.viewOrderHighestPri();
+            Order o = Database.priorityOrder();
             if (o != null) {
-                System.out.println(o);
+                System.out.println("\n" + o);
             } else {
                 System.out.println("No orders to be found");
             }
         } else if (choice.equalsIgnoreCase("C")) { // view all orders
             System.out.println("Viewing all Orders by Highest Priority: " + "\n");
-            Database.viewingOrdersbyHighestPri();
+            System.out.println(Database.priorityOrdersStr());
         } else if (choice.equalsIgnoreCase("D")) { // ship order
             employeeShipOrder();
-
-        } else if (choice.equalsIgnoreCase("X")) {
-            System.out.println("new phone who dis");
-            System.out.println("alr bro");
-            return;
-        } else {
+        } else if (!choice.equalsIgnoreCase("X")) {
             System.out.println("#####\nInvalid option. Please try again!");
-            System.out.println("Within employee else statement");
         }
     }
 
@@ -599,9 +635,7 @@ public class UserInterface {
                 + "\nA.Order ID" + "\n" +
                 "B. Customer First and Last name");
 
-        // SEARCHING FOR ORDER
-
-        String searchOption = input.next();
+        String searchOption = input.nextLine();
         if (searchOption.equalsIgnoreCase("A")) {
 
             System.out.println("Please enter the order ID: ");
@@ -617,9 +651,9 @@ public class UserInterface {
         } else if (searchOption.equalsIgnoreCase("B")) {
             System.out.println("Please enter customer first and last name:");
             System.out.println("\tFirst name: ");
-            String firstName = input.next();
+            String firstName = input.nextLine();
             System.out.println("\tLast name: ");
-            String lastName = input.next();
+            String lastName = input.nextLine();
             Database.searchOrderCust(new Customer(firstName, lastName));
 
         } else {
@@ -628,21 +662,28 @@ public class UserInterface {
     }
 
     /**
-     * -_-
-     * kdfc was lit
+     * Option D in employee menu.
+     * Removes order from heap and
+     * adds it to shipped orders of the
+     * customer
+     * 
      */
     private void employeeShipOrder() {
         System.out.println("Enter order id to ship order: ");
         int orderId = input.nextInt();
-        Database.shipOrder(orderId);
-        log.add("Shipped Order: " + orderId + ".");
-
+        Order oFound = Database.searchID(orderId);
+        if (oFound == null) {
+            System.out.println("Sorry, order not found!");
+        } else {
+            Database.shipOrder(oFound);
+            log.add("Shipped Order: " + orderId + ".");
+        }
     }
 
     /**
      * write employee/manager activity log and receipt to an outfile
      */
-    public void printLog(ArrayList<String> log) {
+    private void printLog(ArrayList<String> log) {
         try {
             if (log.size() != 0) {
                 FileWriter f = new FileWriter("Log.txt", true);
@@ -664,9 +705,9 @@ public class UserInterface {
     /**
      * write customer order information and receipt to an outfile
      */
-    public void printReceipt(ArrayList<String> receipt) {
+    private void printReceipt(ArrayList<String> receipt) {
         try {
-            if (receipt != null) {
+            if (receipt.size() != 0) {
                 File file = new File(String.format("Receipt%d.txt", receiptNum++));
                 PrintWriter output = new PrintWriter(file);
                 for (int i = 0; i < receipt.size(); i++) {

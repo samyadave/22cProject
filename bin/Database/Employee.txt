@@ -3,18 +3,13 @@ Baby
 DaRealDaBaby
 password
 true
-firstName
-lastName
-login1
+Legendary Wizard Mister
+Gary
+MrGary
 password
 true
-firstName
-lastName
-yayayay
-password
-false
-firstName
-lastName
-yayayay
+Legendary Wizard Mister
+Gray
+MrGray
 password
 false

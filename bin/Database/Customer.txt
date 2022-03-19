@@ -1,24 +1,48 @@
 Man
 Guy
-manguy1
+mguy@mail.com
 password
 1111 2nd St
 DaBigCity
 DaSmallState
 12345
-firstName
-lastName
-login
+Felicia
+Rodriguez
+frod@mail.com
+felrod
+2222 1st St
+SmallCity
+BigState
+23456
+Bob
+Job
+bjob@mail.com
+bobjob
+3333 2nd St
+Medium
+Tiny
+34567
+Joe
+Toe
+jtoe@mail.com
+joetoe
+34 Papa John's street
+Big
+SmallCity
+12345
+Barbara
+Genjin
+bgen@mail.com
+bargen
+123 Impact Dr
+ChinoTown
+ChinoState
+12345
+Sam
+Yadav
+syad@mail.com
 password
-address
-city
-state
-zip
-hi
-hielo
-login2
-password
-22
-2
-22
-22
+112
+Street
+Place
+Boulevard

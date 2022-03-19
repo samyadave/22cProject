@@ -122,8 +122,10 @@ public class Customer extends User {
         while (!unshippedOrders.offEnd() && unshippedOrders.getIterator().getOrderID() != orderID) {
             unshippedOrders.advanceIterator();
         }
-        shippedOrders.addLast(unshippedOrders.getIterator());
-        unshippedOrders.removeIterator();
+        if (!unshippedOrders.offEnd()) {
+            shippedOrders.addLast(unshippedOrders.getIterator());
+            unshippedOrders.removeIterator();
+        }
     }
 
     @Override

@@ -110,7 +110,7 @@ public class HashTable<T> {
      * @throws NullPointerException when the
      *                              precondition is violated
      */
-    public int find(T t) throws NullPointerException {
+    public T find(T t) throws NullPointerException {
         if (t == null) {
             throw new NullPointerException("BRUH");
         }
@@ -119,9 +119,9 @@ public class HashTable<T> {
 
         LinkedList<T> bucket = Table.get(this.hash(t));
         if (bucket.findIndex(t) != -1) {
-            return this.hash(t); // the bucket's index value is represented by this.hash(t)
+            return Table.get(this.hash(t)).getFirst(); // the bucket's index value is represented by this.hash(t)
         }
-        return -1;
+        return null;
     } // best case O(1), average case O(1), worst case O(n)
 
     /**

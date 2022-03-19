@@ -55,8 +55,8 @@ public class Order {
     }
 
     // orderContents
-    public Order(int orderID, Customer customer, ShippingSpeed shippingSpeed) {
-        this.orderID = orderID;
+    public Order(Customer customer, ShippingSpeed shippingSpeed) {
+        this.orderID = ++count;
         this.customer = customer;
         this.date = LocalDate.now().toString();
         // orderContents = new LinkedList<>(o); // copies o onto the orderContents
@@ -66,11 +66,15 @@ public class Order {
     }
 
     public Order(Customer customer) {
-        this(-1, customer, null);
+        this(customer, null);
     }
 
     public Order(int orderID) {
-        this(orderID, null, null);
+        this.orderID = orderID;
+        this.date = LocalDate.now().toString();
+        // orderContents = new LinkedList<>(o); // copies o onto the orderContents
+        // this.priority = calculatePriority(shippingSpeed);
+        orderContents = new LinkedList<>();
     }
 
     /**
@@ -85,10 +89,49 @@ public class Order {
         }
     }
 
+    /**
+     * 
+     * @param p
+     */
+    public void removeItem(Product p) {
+        orderContents.positionIterator();
+        while (!orderContents.offEnd()) {
+            if (orderContents.getIterator().equals(p)) {
+                orderContents.removeIterator();
+                break;
+            }
+            orderContents.advanceIterator();
+        }
+    }
+
+    /**
+     * Checks if product in cart based on entire product
+     * 
+     * @param p
+     * @return
+     */
     public boolean contains(Product p) {
         orderContents.positionIterator();
         while (!orderContents.offEnd()) {
             if (orderContents.getIterator().equals(p)) {
+                return true;
+            }
+            orderContents.advanceIterator();
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if product in cart based on name of product
+     * 
+     * @param p
+     * @return
+     */
+    public boolean contains(String p) {
+        orderContents.positionIterator();
+        while (!orderContents.offEnd()) {
+            if (orderContents.getIterator().getName().equalsIgnoreCase(p)) {
                 return true;
             }
             orderContents.advanceIterator();
@@ -255,19 +298,4 @@ public class Order {
         return true;
     }
 
-    // @Override
-    // public boolean equals(Object o) {
-    // if (this == o) {
-    // return true; // compares memory address
-    // } else if (!(o instanceof Order)) {
-    // return false; // makes sure comparing 2 of same type
-    // } else {
-    // Order p = (Order) o;
-    // return this.getOrderID() == p.getOrderID() &&
-    // this.getCustomer().equals(p.getCustomer()) &&
-    // getDate().equalsIgnoreCase(p.getDate()) && (this.getShippingSpeed() ==
-    // p.getShippingSpeed())
-    // && this.getPriority() == p.getPriority();
-    // }
-    // }
 }

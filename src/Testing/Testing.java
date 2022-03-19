@@ -42,7 +42,7 @@ public class Testing {
                                                                 "city", "state",
                                                                 "2222")));
                 Database.startUp();
-                assertEquals(Database.Status.Success, Database.login("manguy1", "password"));
+                assertEquals(Database.Status.Success, Database.login("login", "password"));
         }
 
         @Test
@@ -50,9 +50,9 @@ public class Testing {
                 Customer c = new Customer("firstName", "lastName", "login", "password", "address",
                                 "city", "state",
                                 "2222");
-                Order o = new Order(10012, c, ShippingSpeed.OVERNIGHT);
+                Order o = new Order(c, ShippingSpeed.OVERNIGHT);
                 Database.placeOrder(o, c);
-                assertEquals(o.toString(), Database.viewOrderHighestPri().toString());
+                assertEquals(o.toString(), Database.priorityOrder().toString());
         }
 
         @Test
@@ -60,11 +60,11 @@ public class Testing {
                 Customer c = new Customer("firstName", "lastName", "login", "password", "address",
                                 "city", "state",
                                 "2222");
-                Order o = new Order(10012, c, ShippingSpeed.OVERNIGHT);
-                Order o1 = new Order(10012123, c, ShippingSpeed.RUSH);
+                Order o = new Order(c, ShippingSpeed.OVERNIGHT);
+                Order o1 = new Order(c, ShippingSpeed.RUSH);
                 Database.placeOrder(o, c);
                 Database.placeOrder(o1, c);
-                assertEquals(o.toString() + o1.toString(), Database.viewingOrdersbyHighestPri());
+                assertEquals(o.toString() + o1.toString(), Database.priorityOrdersStr());
         }
 
         @Test
@@ -72,28 +72,28 @@ public class Testing {
                 Customer c = new Customer("firstName", "lastName", "login", "password", "address",
                                 "city", "state",
                                 "2222");
-                Order o = new Order(10012, c, ShippingSpeed.OVERNIGHT);
+                Order o = new Order(c, ShippingSpeed.OVERNIGHT);
                 Database.placeOrder(o, c);
-                assertEquals(o.toString(), Database.viewingOrdersbyHighestPri());
-                Database.shipOrder(o.getOrderID()); //
-                assertEquals("", Database.viewingOrdersbyHighestPri());
+                assertEquals(o.toString(), Database.priorityOrdersStr());
+                Database.shipOrder(o); //
+                assertEquals("", Database.priorityOrdersStr());
 
         }
 
         @Test
         void testHeapSearch() {
                 Heap<Order> orders = new Heap<>(100);
-                Order o = new Order(10012, new Customer(), ShippingSpeed.OVERNIGHT);
+                Order o = new Order(new Customer(), ShippingSpeed.OVERNIGHT);
                 orders.insert(o, new IDcomparator());
                 assertFalse(orders.isEmpty());
                 // assertEquals(o, orders.search(new Order(), new IDcomparator()));
-                assertEquals(o, orders.search(new Order(10012), new IDcomparator()));
+                assertEquals(o, orders.search(new Order(1001), new IDcomparator()));
         }
 
         @Test
         void testHeapRemove() {
                 Heap<Order> orders = new Heap<>(100);
-                Order o = new Order(10012, new Customer(), ShippingSpeed.OVERNIGHT);
+                Order o = new Order(new Customer(), ShippingSpeed.OVERNIGHT);
                 orders.insert(o, new IDcomparator());
                 assertFalse(orders.isEmpty());
                 orders.remove(1, new IDcomparator());
@@ -103,9 +103,9 @@ public class Testing {
         @Test
         void testHeapGetIndex() {
                 Heap<Order> orders = new Heap<>(100);
-                Order o = new Order(10012, new Customer(), ShippingSpeed.OVERNIGHT);
-                Order o1 = new Order(100111, new Customer(), ShippingSpeed.OVERNIGHT);
-                Order o2 = new Order(10211, new Customer(), ShippingSpeed.OVERNIGHT);
+                Order o = new Order(new Customer(), ShippingSpeed.OVERNIGHT);
+                Order o1 = new Order(new Customer(), ShippingSpeed.OVERNIGHT);
+                Order o2 = new Order(new Customer(), ShippingSpeed.OVERNIGHT);
                 assertEquals(-1, orders.getIndex(o, new IDcomparator()));
                 orders.insert(o, new IDcomparator());
                 orders.insert(o1, new IDcomparator());
@@ -118,9 +118,9 @@ public class Testing {
         @Test
         void testHeapInsert() {
                 Heap<Order> orders = new Heap<>(100);
-                Order o = new Order(10012, new Customer(), ShippingSpeed.OVERNIGHT);
-                Order o1 = new Order(100111, new Customer(), ShippingSpeed.OVERNIGHT);
-                Order o2 = new Order(10211, new Customer(), ShippingSpeed.OVERNIGHT);
+                Order o = new Order(new Customer(), ShippingSpeed.OVERNIGHT);
+                Order o1 = new Order(new Customer(), ShippingSpeed.OVERNIGHT);
+                Order o2 = new Order(new Customer(), ShippingSpeed.OVERNIGHT);
                 orders.insert(o, new IDcomparator());
                 assertEquals(1, orders.getHeapSize());
                 assertEquals(o.toString(), orders.toString());

@@ -11,19 +11,15 @@ package Database;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Scanner;
 
 import OrderUtil.Heap;
 import OrderUtil.Order;
 import OrderUtil.Order.ShippingSpeed;
-import ProductUtil.BST;
-import ProductUtil.Product;
 import UserUtil.Customer;
 import UserUtil.Employee;
 import UserUtil.HashTable;
@@ -38,8 +34,6 @@ public class Database {
     private static HashTable<Employee> employeeDatabase = new HashTable<>(100);
     private static HashTable<String> usernames = new HashTable<>(100);
     private static HashTable<String> credentials = new HashTable<>(100);
-    private static BST<Product> itemsName = new BST<>();
-    private static BST<Product> itemsType = new BST<>();
     private static Heap<Order> orders = new Heap<>(100);
 
     public static User loggedIn;
@@ -48,6 +42,7 @@ public class Database {
      * <ul>
      * <li>Customer
      * <li>Employee
+     * <li>Manager
      * </ul>
      */
     public enum UserType {
@@ -128,9 +123,9 @@ public class Database {
         }
 
         if (customerDatabase.contains(new Customer(username, password))) {
-            loggedIn = Database.customerDatabase.get(new Customer(username, password));
+            loggedIn = Database.customerDatabase.find(new Customer(username, password));
         } else if (employeeDatabase.contains(new Employee(username, password))) {
-            loggedIn = Database.employeeDatabase.get(new Employee(username, password));
+            loggedIn = Database.employeeDatabase.find(new Employee(username, password));
         } else {
             return Status.Failed;
         }
@@ -142,18 +137,22 @@ public class Database {
      * Populates the database on startup
      */
     public static void startUp() {
-        populateCatalogue();
-        populateOrders();
-
         populateCustomers();
+        populateOrders();
         populateEmployees();
     }
 
     private static void populateOrders() {
-
-        orders.insert(new Order(10012, new Customer("firstName", "lastName", "login", "password", "address",
-                "city", "state",
-                "2222"), ShippingSpeed.OVERNIGHT), new PriorityComparator());
+        Customer c = customerDatabase.find(new Customer("mguy@mail.com", "password"));
+        Order o = new Order(c, ShippingSpeed.OVERNIGHT);
+        Order o1 = new Order(c, ShippingSpeed.RUSH);
+        Order o2 = new Order(c, ShippingSpeed.STANDARD);
+        orders.insert(o, new PriorityComparator());
+        orders.insert(o1, new PriorityComparator());
+        orders.insert(o2, new PriorityComparator());
+        c.addUnshippedOrders(o);
+        c.addUnshippedOrders(o1);
+        c.addUnshippedOrders(o2);
     }
 
     /**
@@ -174,32 +173,15 @@ public class Database {
                 }
                 Customer cust = new Customer(data);
 
-                // TODO: add to order class
-                // Order temp = Database.orderDatabase.findOrder(cust.getLogin());
-                // if (temp.isShipped()) {
-                // cust.addShippedOrders(temp);
-                // } else if (!temp.isDelivered) {
-                // cust.addUnshippedOrders(temp);
-                // }
-
                 Database.customerDatabase.add(cust);
                 Database.usernames.add(data[2]);
                 Database.credentials.add(data[2] + data[3]);
             }
             f.close();
         } catch (IOException e) {
-            // TODO
             System.out.println(e);
         }
     }
-
-    // /**
-    // * Creates 2-way connection between order objects and
-    // * customer objects on startup
-    // */
-    // private static void addOrderConnection(Customer c) {
-    // c
-    // }
 
     /**
      * Creates a new entry in the file when
@@ -214,8 +196,7 @@ public class Database {
             f.write('\n' + c.toString());
             f.close();
         } catch (IOException e) {
-            // TODO
-
+            System.out.println(e);
         }
     }
 
@@ -240,7 +221,6 @@ public class Database {
             }
             f.close();
         } catch (IOException e) {
-            // TODO
             System.out.println(e);
         }
     }
@@ -258,51 +238,7 @@ public class Database {
             f.write('\n' + emp.toString());
             f.close();
         } catch (IOException e) {
-            // TODO
-        }
-    }
-
-    /**
-     * populate the store with products from Catalogue
-     * 
-     * @param input Scanner
-     * 
-     */
-    private static void populateCatalogue() {
-        try {
-            Scanner input = new Scanner(new File("\\src\\Database\\Catalogue.txt"));
-            String name = "";
-            String type = "";
-            int calories = 0;
-            String bestby = "";
-            double price = 0.0;
-            String description = "";
-            int numInStock = 0;
-
-            while (input.hasNextLine()) {
-                name = input.nextLine();
-                type = input.nextLine();
-                calories = input.nextInt();
-                input.nextLine();
-                bestby = input.nextLine();
-                price = input.nextDouble();
-                input.nextLine();
-                description = input.nextLine();
-                numInStock = input.nextInt();
-
-                if (input.hasNextLine()) {
-                    input.nextLine();
-                    input.nextLine();
-                }
-
-                Product p = new Product(name, type, calories, bestby, price, description,
-                        numInStock);
-                itemsName.insert(p, new NameComparator());
-                itemsType.insert(p, new TypeComparator());
-
-            }
-        } catch (IOException e) {
-            // TODO: handle exception
+            System.out.println(e);
         }
     }
 
@@ -328,49 +264,11 @@ public class Database {
 
     }
 
-    /**
-     * Displays all products stored in the BST
-     * sorted by primary key name
-     */
-    public static void displaybyName() {
-        System.out.println("Products sorted by Name: " + itemsName.inOrderString());
-    }
-
-    /**
-     * Displays all products stored in the BST
-     * sorted by secondary key type
-     */
-    public static void displaybyType() {
-        System.out.println("Products sorted by Type: " + itemsType.inOrderString());
-    }
-
-    /**
-     * Search for a product by primary key name
-     * 
-     * @param name of product to search
-     * @return Product found or null
-     */
-    public static Product searchName(String name) {
-        Product n = new Product(name, "");
-        return itemsName.search(n, new NameComparator());
-    }
-
-    /**
-     * Search for a product by secondary key type
-     * 
-     * @param type the type of the product
-     * @return the Product found or null
-     */
-    public static Product searchType(String type) {
-        Product t = new Product("", type);
-        return itemsType.search(t, new NameComparator());
-    }
-
-    public static Order viewOrderHighestPri() {
+    public static Order priorityOrder() {
         return orders.getMin();
     }
 
-    public static String viewingOrdersbyHighestPri() {
+    public static String priorityOrdersStr() {
         return orders.toString();
     }
 
@@ -404,13 +302,11 @@ public class Database {
      * Ships an order from orderID
      * and removes from order heap
      * 
-     * @param orderId
+     * @param o
      */
-    public static void shipOrder(int orderId) {
-        Order o = orders.search(new Order(orderId), new IDComparator());
-
-        o.getCustomer().shipOrder(orderId);
-        orders.remove(orders.getIndex(new Order(orderId), new IDComparator()), new IDComparator());
+    public static void shipOrder(Order o) {
+        o.getCustomer().shipOrder(o.getOrderID());
+        orders.remove(orders.getIndex(o, new IDComparator()), new IDComparator());
     }
 
     /**
@@ -422,6 +318,7 @@ public class Database {
     public static void placeOrder(Order o, Customer c) {
         orders.insert(o, new PriorityComparator());
         c.addUnshippedOrders(o);
+
     }
 
     /**
@@ -441,46 +338,6 @@ public class Database {
         return null;
     }
 
-}
-
-/**
- * Comparator for BST class - Products sorted by primary key
- */
-class NameComparator implements Comparator<Product> {
-    /**
-     * Compares the primary keys (name) of two Product objects
-     * 
-     * @param p1 first product to compare
-     * @param p2 second prodcut to compare
-     * @return an int based on if p1 is >, <, or = to p2
-     */
-    @Override
-    public int compare(Product p1, Product p2) {
-        if (p1.equals(p2)) {
-            return 0;
-        }
-        return p1.getName().compareTo(p2.getName());
-    }
-}
-
-/**
- * Comparator for BST class - Products sorted by secondary key
- */
-class TypeComparator implements Comparator<Product> {
-    /**
-     * Compares the secondary keys (type) of two Product objects
-     * 
-     * @param p1 first product to compare
-     * @param p2 second prodcut to compare
-     * @return an int based on if p1 is >, <, or = to p2
-     */
-    @Override
-    public int compare(Product p1, Product p2) {
-        if (p1.equals(p2)) {
-            return 0;
-        }
-        return p1.getType().compareTo(p2.getType());
-    }
 }
 
 /**
