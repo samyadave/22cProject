@@ -35,10 +35,6 @@ public class Order {
     private static int count = 1000;
     private double price;
 
-    /**
-     * An enumerator for denoting the ShippingSpeed
-     * in three categories:
-     */
     public enum ShippingSpeed {
         OVERNIGHT,
         RUSH,
@@ -46,10 +42,8 @@ public class Order {
 
     }
 
-    /**
-     * Default constructor for an Order()
-     * Made for pre-purchasing purposes
-     */
+    // Constructor
+
     public Order() {
         orderID = ++count;
         customer = null;
@@ -60,16 +54,9 @@ public class Order {
         orderContents = new LinkedList<>();
     }
 
-    /**
-     * A constructor for an Order, for when Customer decides to purchase
-     * a set of items
-     * 
-     * @param orderID
-     * @param customer
-     * @param shippingSpeed
-     */
-    public Order(int orderID, Customer customer, ShippingSpeed shippingSpeed) {
-        this.orderID = orderID;
+    // orderContents
+    public Order(Customer customer, ShippingSpeed shippingSpeed) {
+        this.orderID = ++count;
         this.customer = customer;
         this.date = LocalDate.now().toString();
         // orderContents = new LinkedList<>(o); // copies o onto the orderContents
@@ -78,26 +65,20 @@ public class Order {
         orderContents = new LinkedList<>();
     }
 
-    /**
-     * A one argument Customer constructor for order
-     * 
-     * @param customer
-     */
     public Order(Customer customer) {
-        this(-1, customer, null);
+        this(customer, null);
     }
 
-    /**
-     * A one argument orderID constructor for Order
-     * 
-     * @param orderID
-     */
     public Order(int orderID) {
-        this(orderID, null, null);
+        this.orderID = orderID;
+        this.date = LocalDate.now().toString();
+        // orderContents = new LinkedList<>(o); // copies o onto the orderContents
+        // this.priority = calculatePriority(shippingSpeed);
+        orderContents = new LinkedList<>();
     }
 
     /**
-     * Will remove one stock from a product after ordering
+     * Remove's one stock from the product
      */
     public void removeStock() {
         orderContents.positionIterator();
@@ -109,10 +90,25 @@ public class Order {
     }
 
     /**
-     * Checks whether a specified product is in the orderedContents
      * 
-     * @param p - the product checked for
-     * @return boolean - whether the product is in
+     * @param p
+     */
+    public void removeItem(Product p) {
+        orderContents.positionIterator();
+        while (!orderContents.offEnd()) {
+            if (orderContents.getIterator().equals(p)) {
+                orderContents.removeIterator();
+                break;
+            }
+            orderContents.advanceIterator();
+        }
+    }
+
+    /**
+     * Checks if product in cart based on entire product
+     * 
+     * @param p
+     * @return
      */
     public boolean contains(Product p) {
         orderContents.positionIterator();
@@ -126,30 +122,33 @@ public class Order {
         return false;
     }
 
-    /** GETTERS/ACCESSORS */
-
     /**
+     * Checks if product in cart based on name of product
      * 
-     * @return the orderID
+     * @param p
+     * @return
      */
+    public boolean contains(String p) {
+        orderContents.positionIterator();
+        while (!orderContents.offEnd()) {
+            if (orderContents.getIterator().getName().equalsIgnoreCase(p)) {
+                return true;
+            }
+            orderContents.advanceIterator();
+        }
+
+        return false;
+    }
+
+    /** GETTERS/ACCESSORS */
     public int getOrderID() {
         return orderID;
     }
 
-    /**
-     * 
-     * @return whether the orderedContents is empty
-     */
     public boolean isEmpty() {
         return orderContents.isEmpty();
     }
 
-    /** MUTATORS */
-    /**
-     * Modifies orderedContents with a new product at the end
-     * 
-     * @param p - the product to add to orderedContents
-     */
     public void addProduct(Product p) {
         if (p == null) {
             System.out.println("BURHRURHRH");
@@ -157,63 +156,61 @@ public class Order {
         orderContents.addLast(p);
     }
 
-    /**
-     * 
-     * @return the customer user information
-     */
     public Customer getCustomer() {
         return customer;
     }
 
-    /**
-     * 
-     * @return the customer's first and last name
-     */
     public String getCName() {
         String c = "" + this.getCustomer().getFirstName() + " " + this.getCustomer().getLastName();
         return c;
     }
 
-    /**
-     * 
-     * @return a String of the date shipped
-     */
     public String getDate() {
         return date;
     }
 
-    /**
-     * 
-     * @return the ShippingSpeed enum denoting the type of shipping
-     */
+    // public LinkedList<Product> getOrderContents() {
+    // return orderContents;
+    // }
+
     public ShippingSpeed getShippingSpeed() {
         return shippingSpeed;
     }
 
-    /**
-     * Will return the priority of an item to be sorted in the Heap by minHeap
-     * 
-     * @return calculates the priority value as well as returns one
-     */
     public int getPriority() {
         return priority;
     }
 
+
     /**
-     * Changes the shipping speed from (usually) default to a new value
-     * 
-     * @param value - the ShippingSpeed value
+     * return quantity of product ordered
      */
+    public int getQuantity() {
+        int quantity = 0;
+        orderContents.positionIterator();
+        while (!orderContents.offEnd()) {
+           quantity += orderContents.getIterator().getQuantity();
+           orderContents.advanceIterator();
+        }
+        return quantity;
+    }
+
+    /**
+    *return product ordered
+    */
+    public Product getProduct() {
+        orderContents.positionIterator();
+        while(!orderContents.offEnd()) {
+            orderContents.advanceIterator();
+        }
+        return orderContents.getIterator();
+    }
+
     public void changeShippingSpeed(ShippingSpeed value) {
         this.shippingSpeed = value;
     }
 
-    /**
-     * Will calculate and return the priority of an item to be sorted in the Heap by
-     * minHeap after an order is submitted to be purchased
-     * 
-     * @return calculates the priority value as well as returns one
-     */
+    /** MUTATOR FOR PRIORITY */
     public int calculatePriority(ShippingSpeed shippingSpeed) {
         LocalTime lt = LocalTime.now();
         LocalDate ld = LocalDate.now();
@@ -238,11 +235,6 @@ public class Order {
 
     }
 
-    /**
-     * Gets the price of the order
-     * 
-     * @return the order's products' price
-     */
     public double getPrice() {
         orderContents.positionIterator();
         while (!orderContents.offEnd()) {
@@ -261,11 +253,6 @@ public class Order {
         return price;
     }
 
-    /**
-     * 
-     * @return Returns the order's information with Name, Prices, and Quanities each
-     *         by Product
-     */
     public String productString() {
         String res = "";
         orderContents.positionIterator();
@@ -279,10 +266,6 @@ public class Order {
         return res + "\n";
     }
 
-    /**
-     * Returns a toString of the product with Date Ordered, Product, ShippingSpeed,
-     * and Priority information
-     */
     @Override
     public String toString() {
         String sShippingSpeed = "n/a";
@@ -305,11 +288,6 @@ public class Order {
                 + orderContents.toString();
     }
 
-    /**
-     * An equals compare for the Order class
-     * 
-     * @param obj - object to be compared
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
