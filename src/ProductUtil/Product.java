@@ -129,6 +129,14 @@ public class Product {
 	}
 
 	/**
+	 * returns quantity of product
+	 * @return quantity
+	 */
+	public int getQuantity() {
+		return quantity;
+	}
+
+	/**
 	 * Returns the total number of product
 	 * 
 	 * @return the value of numInStock
@@ -159,6 +167,13 @@ public class Product {
 	}
 
 	/**
+	 * sets the quantity of products ordered
+	 * @param quantity
+	 */
+	public void setQuantity(int quantity) {
+		this.quantity = quantity; 
+	}
+	/**
 	 * Updates numInStock variable by a specified amount
 	 * 
 	 * @param n the number of products to add
@@ -167,21 +182,6 @@ public class Product {
 		numInStock = numInStock + n;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	public int getQuantity() {
-		return quantity;
-	}
-
-	/**
-	 * 
-	 * @param quantity
-	 */
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
 
 	/**
 	 * Overrides equals for Object using the formula given in class. we will

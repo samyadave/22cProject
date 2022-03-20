@@ -326,16 +326,19 @@ public class UserInterface {
      * @param p
      */
     private void addToCart(Product p) {
-        System.out.println("Add to cart (y/n)?");
-        String add = input.nextLine();
+        int update = 0;
+        System.out.print("Add to cart (y/n)? ");
+        String add = input.next();
         if (add.equalsIgnoreCase("y")) {
-            System.out.println("Enter quantity: ");
-            String quantity = input.nextLine();
+            System.out.print("Enter quantity: ");
+            String quantity = input.next();
             while (Integer.valueOf(quantity) >= p.getNumInStock() && !quantity.equalsIgnoreCase("X")) {
                 System.out.println("Not enough stock, please try again.");
-                System.out.println("Enter quantity: (X to return to menu)");
-                quantity = input.nextLine();
+                System.out.print("Enter quantity: (X to return to menu)");
+                quantity = input.next();
             }
+            update = Integer.valueOf(quantity) * (-1);
+            p.updateNumInStock(update);
             if (!quantity.equalsIgnoreCase("X")) {
                 if (shoppingCart.contains(p)) {
                     p.setQuantity(p.getQuantity() + Integer.valueOf(quantity));
@@ -388,13 +391,13 @@ public class UserInterface {
                             : ship.equals("3") ? ShippingSpeed.STANDARD : null;
             shoppingCart.changeShippingSpeed(s);
             System.out.printf("Total price is: $%.2f\n", shoppingCart.getPrice());
-            System.out.println("Continue to checkout? (y/n)");
-            ship = input.nextLine();
+            System.out.print("Continue to checkout? (y/n): ");
+            ship = input.next();
             if (ship.equalsIgnoreCase("y")) {
-                System.out.println("Enter payment information: ");
-                ship = input.nextLine();
-                System.out.println("Place order? (y/n)");
-                ship = input.nextLine();
+                System.out.print("Enter payment information: ");
+                ship = input.next();
+                System.out.print("Place order? (y/n): ");
+                ship = input.next();
                 if (ship.equalsIgnoreCase("y")) {
                     cust.addUnshippedOrders(shoppingCart);
                     Database.placeOrder(shoppingCart, cust);
@@ -517,7 +520,7 @@ public class UserInterface {
             Product.addProduct(add);
 
             System.out.print(add.toString());
-            log.add("New product added: \nName: " + pname);
+            log.add("New product added: " + pname);
 
         }
     }

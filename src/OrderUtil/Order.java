@@ -181,6 +181,31 @@ public class Order {
         return priority;
     }
 
+
+    /**
+     * return quantity of product ordered
+     */
+    public int getQuantity() {
+        int quantity = 0;
+        orderContents.positionIterator();
+        while (!orderContents.offEnd()) {
+           quantity += orderContents.getIterator().getQuantity();
+           orderContents.advanceIterator();
+        }
+        return quantity;
+    }
+
+    /**
+    *return product ordered
+    */
+    public Product getProduct() {
+        orderContents.positionIterator();
+        while(!orderContents.offEnd()) {
+            orderContents.advanceIterator();
+        }
+        return orderContents.getIterator();
+    }
+
     public void changeShippingSpeed(ShippingSpeed value) {
         this.shippingSpeed = value;
     }
