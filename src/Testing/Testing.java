@@ -132,6 +132,55 @@ public class Testing {
                                 orders.toString());
         }
 
+        @Test
+        void testPrioritySort() {
+                Heap<Order> orders = new Heap<>(100);
+                Order o = new Order(new Customer(), ShippingSpeed.OVERNIGHT);
+                Order o1 = new Order(new Customer(), ShippingSpeed.RUSH);
+                Order o2 = new Order(new Customer(), ShippingSpeed.STANDARD);
+                orders.insert(o1, new PriorityComparator());
+                assertEquals(1, orders.getHeapSize());
+                assertEquals(o1.toString(), orders.toString());
+                orders.insert(o, new PriorityComparator());
+                assertEquals(2, orders.getHeapSize());
+                assertEquals(o.toString() + o1.toString(), orders.toString());
+                orders.insert(o2, new PriorityComparator());
+                assertEquals(o.toString() + o1.toString() + o2.toString(),
+                                orders.toString());
+        }
+
+        @Test
+        void testPlaceOrder() {
+                Customer c = new Customer("firstName", "lastName", "login", "password", "address",
+                                "city", "state",
+                                "2222");
+                Order o = new Order(c, ShippingSpeed.OVERNIGHT);
+                Order o1 = new Order(c, ShippingSpeed.OVERNIGHT);
+                Order o2 = new Order(c, ShippingSpeed.OVERNIGHT);
+                Database.placeOrder(o, c);
+                assertEquals(o.toString(), Database.priorityOrdersStr());
+                Database.placeOrder(o1, c);
+                assertEquals(o.toString() + o1.toString(), Database.priorityOrdersStr());
+                Database.placeOrder(o2, c);
+                assertEquals(o.toString() + o1.toString() + o2.toString(),
+                                Database.priorityOrdersStr());
+        }
+
+        @Test
+        void testSearchBYName() {
+                Customer c = new Customer("firstName", "lastName", "login", "password", "address",
+                                "city", "state",
+                                "2222");
+                Order o = new Order(c, ShippingSpeed.OVERNIGHT);
+                Order o1 = new Order(c);
+                assertEquals("firstName lastName", o1.getCName());
+                Database.placeOrder(o, c);
+                assertEquals("firstName lastName", o.getCName());
+                assertEquals(o.toString(), Database.searchOrderCust(new Customer("firstName", "lastName", true)));
+
+                // assertEquals(o.toString(), Database.priorityOrdersStr());
+        }
+
         class PriorityComparator implements Comparator<Order> {
                 @Override
                 public int compare(Order p1, Order p2) {
@@ -149,6 +198,7 @@ public class Testing {
                         if (o1.equals(o2)) {
                                 return 0;
                         }
+
                         return o1.getCName().compareTo(o2.getCName());
                 }
         }

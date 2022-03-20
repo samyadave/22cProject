@@ -10,12 +10,10 @@
  */
 
 import Database.Database;
-import ProductUtil.Product;
 
 public class MegaMart {
     public static void main(String[] args) {
         Database.startUp();
-        Product.populateCatalogue();
         UserInterface u = new UserInterface();
         u.run();
     }

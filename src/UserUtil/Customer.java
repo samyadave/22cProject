@@ -52,6 +52,11 @@ public class Customer extends User {
         super(username, password);
     }
 
+    public Customer(String fname, String lname, boolean t) {
+        this.firstName = fname;
+        this.lastName = lname;
+    }
+
     public Customer(String firstName, String lastName, String login, String password, String address, String city,
             String state, String zip) {
         super(firstName, lastName, login, password);
@@ -132,6 +137,26 @@ public class Customer extends User {
     public String toString() {
         return String.format("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s", firstName, lastName, userName, password, address, city,
                 state, zip);
+    }
+
+    public String shippedOrdersToString() {
+        String res = "";
+        shippedOrders.positionIterator();
+        while (!shippedOrders.offEnd()) {
+            res += shippedOrders.getIterator();
+            shippedOrders.advanceIterator();
+        }
+        return res;
+    }
+
+    public String unShippedOrdersToString() {
+        String res = "";
+        unshippedOrders.positionIterator();
+        while (!unshippedOrders.offEnd()) {
+            res += unshippedOrders.getIterator();
+            unshippedOrders.advanceIterator();
+        }
+        return res;
     }
 
 }

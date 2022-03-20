@@ -19,7 +19,8 @@ import java.util.Comparator;
 
 import OrderUtil.Heap;
 import OrderUtil.Order;
-import OrderUtil.Order.ShippingSpeed;
+import ProductUtil.Product;
+import ProductUtil.ToString;
 import UserUtil.Customer;
 import UserUtil.Employee;
 import UserUtil.HashTable;
@@ -137,22 +138,9 @@ public class Database {
      * Populates the database on startup
      */
     public static void startUp() {
+        Product.populateCatalogue();
         populateCustomers();
-        populateOrders();
         populateEmployees();
-    }
-
-    private static void populateOrders() {
-        Customer c = customerDatabase.find(new Customer("mguy@mail.com", "password"));
-        Order o = new Order(c, ShippingSpeed.OVERNIGHT);
-        Order o1 = new Order(c, ShippingSpeed.RUSH);
-        Order o2 = new Order(c, ShippingSpeed.STANDARD);
-        orders.insert(o, new PriorityComparator());
-        orders.insert(o1, new PriorityComparator());
-        orders.insert(o2, new PriorityComparator());
-        c.addUnshippedOrders(o);
-        c.addUnshippedOrders(o1);
-        c.addUnshippedOrders(o2);
     }
 
     /**
@@ -269,7 +257,7 @@ public class Database {
     }
 
     public static String priorityOrdersStr() {
-        return orders.toString();
+        return orders.toStr(new EmployeeOrderStr());
     }
 
     public static Order searchID(int orderID) {
@@ -318,7 +306,6 @@ public class Database {
     public static void placeOrder(Order o, Customer c) {
         orders.insert(o, new PriorityComparator());
         c.addUnshippedOrders(o);
-
     }
 
     /**
@@ -326,14 +313,11 @@ public class Database {
      * @param customer
      * @return
      */
-    public static ArrayList<LinkedList<Order>> searchOrderCust(Customer customer) {
+    public static LinkedList<Order> searchOrderCust(Customer customer) {
         Order o = orders.search(new Order(customer), new CustomerComparator());
 
         if (o != null) {
-            ArrayList<LinkedList<Order>> arr = new ArrayList<>();
-            arr.add(o.getCustomer().getUnshippedOrders());
-            arr.add(o.getCustomer().getShippedOrders());
-            return arr;
+            return o.getCustomer().getUnshippedOrders();
         }
         return null;
     }
@@ -349,7 +333,7 @@ class PriorityComparator implements Comparator<Order> {
         if (p1.equals(p2)) {
             return 0;
         }
-        return Integer.compare(p1.getPriority(), (p2.getPriority()));
+        return p1.getPriority() - p2.getPriority();
     }
 }
 
@@ -379,4 +363,12 @@ class IDComparator implements Comparator<Order> {
         }
         return Integer.compare(o1.getOrderID(), o2.getOrderID());
     }
+}
+
+class EmployeeOrderStr implements ToString<Order> {
+    @Override
+    public String toStr(Order t) {
+        return t.emptoString();
+    }
+
 }

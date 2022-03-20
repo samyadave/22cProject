@@ -130,6 +130,7 @@ public class Product {
 
 	/**
 	 * returns quantity of product
+	 * 
 	 * @return quantity
 	 */
 	public int getQuantity() {
@@ -168,11 +169,13 @@ public class Product {
 
 	/**
 	 * sets the quantity of products ordered
+	 * 
 	 * @param quantity
 	 */
 	public void setQuantity(int quantity) {
-		this.quantity = quantity; 
+		this.quantity = quantity;
 	}
+
 	/**
 	 * Updates numInStock variable by a specified amount
 	 * 
@@ -181,7 +184,6 @@ public class Product {
 	public void updateNumInStock(int n) {
 		numInStock = numInStock + n;
 	}
-
 
 	/**
 	 * Overrides equals for Object using the formula given in class. we will
@@ -205,16 +207,16 @@ public class Product {
 	 * Displays all products stored in the BST
 	 * sorted by primary key name
 	 */
-	public static void displaybyName() { // move to database
-		System.out.println("\nProducts sorted by Name: " + itemsName.inOrderString());
+	public static void displaybyName(ToString<Product> t) { // move to database
+		System.out.println("\nProducts sorted by Name: " + itemsName.inOrderString(t));
 	}
 
 	/**
 	 * Displays all products stored in the BST
 	 * sorted by secondary key type
 	 */
-	public static void displaybyType() { // move to database
-		System.out.println("\nProducts sorted by Type: " + itemsType.inOrderString());
+	public static void displaybyType(ToString<Product> t) { // move to database
+		System.out.println("\nProducts sorted by Type: " + itemsType.inOrderString(t));
 	}
 
 	/**

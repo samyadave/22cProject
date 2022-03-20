@@ -13,6 +13,9 @@ package OrderUtil;
 //Maybe when ordering stuff we can keep track of when the person makes an order with the time import class
 
 import java.util.Comparator;
+
+import ProductUtil.ToString;
+
 import java.util.ArrayList;
 
 public class Heap<T> {
@@ -69,11 +72,11 @@ public class Heap<T> {
         int right = getRight(index);
 
         // compares element of left child to parent
-        if (hasLeft(left) && (comparator.compare(getElement(left), getElement(indexMin)) < 0)) {
+        if (hasLeft(left) && (comparator.compare(getElement(left), getElement(indexMin)) > 0)) {
             indexMin = left;
         }
         // compares element of right child to smallest element
-        if (hasRight(right) && (comparator.compare(getElement(right), getElement(indexMin)) < 0)) {
+        if (hasRight(right) && (comparator.compare(getElement(right), getElement(indexMin)) > 0)) {
             indexMin = right;
         }
         // if parent is not smallest value, swap with smallest child
@@ -95,10 +98,13 @@ public class Heap<T> {
     public void insert(T key, Comparator<T> comparator) {
         if (heapSize == 0) {
             heap.set(1, key);
+            heapSize++; // need or no need?
         } else {
+            heapSize++; // need or no need?
+            heap.set(heapSize, key);
             heapifyUp(heapSize, key, comparator);
         }
-        heapSize++; // need or no need?
+
     }
 
     /**
@@ -108,15 +114,14 @@ public class Heap<T> {
      * @param key   the data
      * @precondition
      */
-    private void heapifyUp(int index, T key, Comparator<T> comparator) {
-        heap.set(index + 1, key);
+    private void heapifyUp(int index, T key, Comparator<T> c) {
         int indexMin = getParent(index);
 
-        if (hasParent(index) && (comparator.compare(key, heap.get(indexMin)) < 0)) {
-            T temp = getElement(indexMin);
+        if (hasParent(index) && (c.compare(key, heap.get(indexMin)) < 0)) {
+            T temp = heap.get(indexMin);
             heap.set(indexMin, key);
             heap.set(index, temp);
-            heapifyUp(indexMin, key, comparator);
+            heapifyUp(indexMin, key, c);
         }
     }
 
@@ -172,7 +177,8 @@ public class Heap<T> {
         if (index > heapSize || index <= 0) {
             throw new IndexOutOfBoundsException("getParent(): Index is likely out of bounds!");
         }
-        return index / 2;
+
+        return index / 2 > 0 ? index / 2 : 1;
     }
 
     public boolean hasParent(int index) {
@@ -200,11 +206,8 @@ public class Heap<T> {
     }
 
     public boolean hasLeft(int index) {
-        if (2 * index < heap.size()) {
-            return heap.get(2 * index) != null;
-        }
 
-        return false;
+        return index * 2 < heapSize;
     }
 
     /**
@@ -308,6 +311,20 @@ public class Heap<T> {
         String str = "";
         for (int i = 1; i <= heapSize; i++) {
             str += heap.get(i) != null ? heap.get(i).toString() : "";
+        }
+        return str;
+    }
+
+    /**
+     * For specific case string
+     * 
+     * @param t
+     * @return
+     */
+    public String toStr(ToString<T> t) {
+        String str = "";
+        for (int i = 1; i <= heapSize; i++) {
+            str += heap.get(i) != null ? t.toStr(heap.get(i)) + "\n" : "";
         }
         return str;
     }

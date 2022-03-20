@@ -66,7 +66,10 @@ public class Order {
     }
 
     public Order(Customer customer) {
-        this(customer, null);
+        this.orderID = ++count;
+        this.customer = customer;
+        this.date = LocalDate.now().toString();
+        orderContents = new LinkedList<>();
     }
 
     public Order(int orderID) {
@@ -181,7 +184,6 @@ public class Order {
         return priority;
     }
 
-
     /**
      * return quantity of product ordered
      */
@@ -189,18 +191,18 @@ public class Order {
         int quantity = 0;
         orderContents.positionIterator();
         while (!orderContents.offEnd()) {
-           quantity += orderContents.getIterator().getQuantity();
-           orderContents.advanceIterator();
+            quantity += orderContents.getIterator().getQuantity();
+            orderContents.advanceIterator();
         }
         return quantity;
     }
 
     /**
-    *return product ordered
-    */
+     * return product ordered
+     */
     public Product getProduct() {
         orderContents.positionIterator();
-        while(!orderContents.offEnd()) {
+        while (!orderContents.offEnd()) {
             orderContents.advanceIterator();
         }
         return orderContents.getIterator();
@@ -208,10 +210,19 @@ public class Order {
 
     public void changeShippingSpeed(ShippingSpeed value) {
         this.shippingSpeed = value;
+        this.priority = calculatePriority(shippingSpeed);
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void setDate() {
+        this.date = LocalDate.now().toString();
     }
 
     /** MUTATOR FOR PRIORITY */
-    public int calculatePriority(ShippingSpeed shippingSpeed) {
+    private int calculatePriority(ShippingSpeed shippingSpeed) {
         LocalTime lt = LocalTime.now();
         LocalDate ld = LocalDate.now();
         int hour = lt.getHour();
@@ -232,7 +243,6 @@ public class Order {
         }
 
         return day + hour + minute + month;
-
     }
 
     public double getPrice() {
@@ -266,6 +276,26 @@ public class Order {
         return res + "\n";
     }
 
+    public String emptoString() {
+        String sShippingSpeed = "n/a";
+        if (shippingSpeed == null) {
+            sShippingSpeed = "n/a";
+        } else if (shippingSpeed == ShippingSpeed.OVERNIGHT) {
+            sShippingSpeed = "Overnight Shipping";
+        } else if (shippingSpeed == ShippingSpeed.RUSH) {
+            sShippingSpeed = "Rush Shipping";
+        } else if (shippingSpeed == ShippingSpeed.STANDARD) {
+            sShippingSpeed = "Standard Shipping";
+        }
+
+        return "Order ID: " + orderID + "\n" +
+                "Customer: " + customer.getFirstName() + " " + customer.getLastName() + "\n"
+                +
+                "Date Ordered: " + date + "\n" +
+                "Shipping Speed: " + sShippingSpeed + "\n" +
+                "Priority: " + priority + "\n";
+    }
+
     @Override
     public String toString() {
         String sShippingSpeed = "n/a";
@@ -280,12 +310,9 @@ public class Order {
         }
 
         return "Order ID: " + orderID + "\n" +
-        // "Customer: " + customer.getFirstName() + " " + customer.getLastName() + "\n"
-        // +
                 "Date Ordered: " + date + "\n" +
                 "Shipping Speed: " + sShippingSpeed + "\n" +
-                "Priority: " + priority
-                + orderContents.toString();
+                productString();
     }
 
     @Override

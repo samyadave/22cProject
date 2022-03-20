@@ -1,7 +1,6 @@
-Shipped Order: 10012.
-Shipped Order: 10012.
-Shipped Order: 10012.
-Shipped Order: 1001.
-Shipped Order: 1001.
-Shipped Order: 1001.
-Shipped Order: 1001.
+Shipped Order: 1002.
+Shipped Order: 1002.
+New product added: Chocolate
+Updated number of Hot Cheetos in stock: 50
+
+Removed product Milk from catalogue.

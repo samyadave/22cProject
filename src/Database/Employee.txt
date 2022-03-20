@@ -3,13 +3,13 @@ Baby
 DaRealDaBaby
 password
 true
-Legendary Wizard Mister
+Mister
 Gary
-MrGary
+manager
 password
 true
-Legendary Wizard Mister
+Mister
 Gray
-MrGray
+employee
 password
 false
