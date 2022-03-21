@@ -29,7 +29,6 @@ import java.io.PrintWriter;
 
 public class UserInterface {
     private static Scanner input = new Scanner(System.in);
-
     private static ArrayList<String> receipt = new ArrayList<String>(); // for the customers
     private static ArrayList<String> log = new ArrayList<String>(); // for the employee
     private static int receiptNum = 1;
@@ -500,7 +499,6 @@ public class UserInterface {
      * Adds new product to catalogue
      * 
      */
-
     private void managerAddProd() {
         System.out.print("Enter the name of the product: ");
         input.nextLine();
@@ -546,7 +544,6 @@ public class UserInterface {
      * Updates an existing product
      * 
      */
-
     private void managerUpdateProd() {
         int search = 0;
         System.out.print("Enter the name of the product: ");

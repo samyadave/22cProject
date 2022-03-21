@@ -23,14 +23,6 @@ public class Heap<T> {
     private int heapSize;
     private ArrayList<T> heap;
 
-    public Heap(int size) {
-        this.heap = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            heap.add(null);
-        }
-        this.heapSize = 0;
-    }
-
     /**
      * Constructors/
      * 
@@ -44,6 +36,20 @@ public class Heap<T> {
         heap = new ArrayList<>(data);
         heapSize = 0;
         buildHeap(comparator);
+    }
+
+    /**
+     * Constructor for the Heap class
+     * 
+     * @param size size of arraylist
+     *             Calls buildHeap
+     */
+    public Heap(int size) {
+        this.heap = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            heap.add(null);
+        }
+        this.heapSize = 0;
     }
 
     /** Mutators */
@@ -181,6 +187,13 @@ public class Heap<T> {
         return index / 2 > 0 ? index / 2 : 1;
     }
 
+    /**
+     * returns true or false whether the index
+     * has a parent or not
+     * 
+     * @param index index to check
+     * @return if index has a parent
+     */
     public boolean hasParent(int index) {
         if (index <= 1) {
             return false;
@@ -205,6 +218,12 @@ public class Heap<T> {
         return index + index;
     }
 
+    /**
+     * checks if the left child is null
+     * 
+     * @param index index of parent
+     * @return if left child of index is null
+     */
     public boolean hasLeft(int index) {
 
         return index * 2 < heapSize;
@@ -226,6 +245,12 @@ public class Heap<T> {
         return index + index + 1;
     }
 
+    /**
+     * checks if the right child is null
+     * 
+     * @param index index of parent
+     * @return if right child of index is null
+     */
     public boolean hasRight(int index) {
         if (2 * index + 1 < heap.size()) {
             return heap.get(2 * index + 1) != null;
@@ -234,6 +259,12 @@ public class Heap<T> {
         return false;
     }
 
+    /**
+     * finds the index of an element
+     * 
+     * @param data customer order to search for
+     * @return index of the order in heap
+     */
     public int getIndex(T data, Comparator<T> comparator) {
         for (int i = 1; i <= heapSize; i++) {
             if (comparator.compare(heap.get(i), data) == 0) {
@@ -252,6 +283,11 @@ public class Heap<T> {
         return heapSize;
     }
 
+    /**
+     * checks if heap is empty
+     * 
+     * @return if size of heap is 0
+     */
     public boolean isEmpty() {
         return getHeapSize() == 0;
     }
@@ -273,6 +309,12 @@ public class Heap<T> {
 
     /** Additional Operations */
 
+    /**
+     * searches for an order within the heap
+     * 
+     * @param data order to search for
+     * @return order if found
+     */
     public T search(T data, Comparator<T> comparator) {
         if (isEmpty()) {
             return null;
@@ -282,6 +324,14 @@ public class Heap<T> {
         }
     }
 
+    /**
+     * helper method for search, goes through entire
+     * heap to find matching data
+     * 
+     * @param data  order to search for
+     * @param index starting point to search at
+     * @return element if found, null if not
+     */
     private T search(T data, int index, Comparator<T> comparator) {
         if (heap.get(index) == null) {
             return null;

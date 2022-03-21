@@ -219,7 +219,8 @@ public class BST<T> {
     /**
      * Inserts a new node in the tree
      * 
-     * @param data the data to insert
+     * @param data       the data to insert
+     * @param comparator comparator from Compare Class
      */
     public void insert(T data, Comparator<T> comparator) {
         if (root == null) {
@@ -233,9 +234,11 @@ public class BST<T> {
      * Helper method to insert
      * Inserts a new value in the tree
      * 
-     * @param data the data to insert
-     * @param node the current node in the search for the correct location in which
-     *             to insert
+     * @param data       the data to insert
+     * @param node       the current node in the search for the correct location in
+     *                   which
+     *                   to insert
+     * @param comparator comparator from Compare Class
      */
     private void insert(T data, Node node, Comparator<T> comparator) { // UPDATE
         if (comparator.compare(data, node.data) <= 0) {
@@ -256,7 +259,8 @@ public class BST<T> {
     /**
      * Removes a value from the BST
      * 
-     * @param data the value to remove
+     * @param data       the value to remove
+     * @param comparator comparator from Compare Class
      * @precondition !isEmpty()
      * @throws IllegalStateException when BST is empty
      */
@@ -270,8 +274,9 @@ public class BST<T> {
     /**
      * Helper method to the remove method
      * 
-     * @param data the data to remove
-     * @param node the current node
+     * @param data       the data to remove
+     * @param node       the current node
+     * @param comparator comparator from Compare Class
      * @return an updated reference variable
      */
     private Node remove(T data, Node node, Comparator<T> comparator) { // UPDATE
@@ -302,7 +307,8 @@ public class BST<T> {
     /**
      * Searches for a specified value in the tree
      * 
-     * @param data the value to search for
+     * @param data       the value to search for
+     * @param comparator comparator from Compare Class
      * @return whether the value is stored in the tree
      */
     public T search(T data, Comparator<T> comparator) {
@@ -316,8 +322,9 @@ public class BST<T> {
     /**
      * Helper method for the search method
      * 
-     * @param data the data to search for
-     * @param node the current node to check
+     * @param data       the data to search for
+     * @param node       the current node to check
+     * @param comparator comparator from Compare Class
      * @return whether the data is stored
      *         in the tree
      */
@@ -467,7 +474,8 @@ public class BST<T> {
     /**
      * Creates a BST of minimal height given an array of values
      * 
-     * @param array the list of values to insert
+     * @param array      the list of values to insert
+     * @param comparator comparator from Compare Class
      * @precondition array must be sorted in ascending order
      * @throws IllegalArgumentException when the array is unsorted
      */

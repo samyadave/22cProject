@@ -14,7 +14,6 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Comparator;
 
 import OrderUtil.Heap;
@@ -40,6 +39,7 @@ public class Database {
     public static User loggedIn;
 
     /**
+     * An enumator to determine what UserType the user is currently
      * <ul>
      * <li>Customer
      * <li>Employee
@@ -53,6 +53,7 @@ public class Database {
     }
 
     /**
+     * Log in Status in either Failed, Success, Error
      * <ul>
      * <li>Failed - Attempt to add user with duplicate username
      * <li>Success - Successfully performed the operation,
@@ -252,14 +253,30 @@ public class Database {
 
     }
 
+    /**
+     * Access orders heap and give highest priority
+     * order
+     * 
+     * @return the order with highest priority
+     */
     public static Order priorityOrder() {
         return orders.getMin();
     }
 
+    /**
+     * Returns a string of the orders heap
+     * 
+     * @return string of all orders by priority
+     */
     public static String priorityOrdersStr() {
         return orders.toStr(new EmployeeOrderStr());
     }
 
+    /**
+     * 
+     * @param orderID
+     * @return order by orderID
+     */
     public static Order searchID(int orderID) {
         Order o = new Order(orderID);
         return orders.search(o, new IDComparator());
@@ -273,18 +290,6 @@ public class Database {
     public static void addOrder(Order o) {
         orders.insert(o, new PriorityComparator());
     }
-
-    /*
-     * ﾊ,,ﾊ
-     * （ ﾟωﾟ ) No Thank You
-     * ／ ＼
-     * ((⊂ ） ﾉ＼つ))
-     * （＿⌒ヽ
-     * ヽ ﾍ }
-     * 
-     * ε≡Ξ ﾉノ ｀J
-     */
-    // line 501
 
     /**
      * Ships an order from orderID
@@ -309,9 +314,10 @@ public class Database {
     }
 
     /**
+     * Searches for an Order under customer parameters
      * 
-     * @param customer
-     * @return
+     * @param customer - Customer type to be searched for
+     * @return the linkedlist of orders under the customer
      */
     public static LinkedList<Order> searchOrderCust(Customer customer) {
         Order o = orders.search(new Order(customer), new CustomerComparator());
@@ -326,6 +332,7 @@ public class Database {
 
 /**
  * Comparator for Heap class
+ * Compares priority in minHeap
  */
 class PriorityComparator implements Comparator<Order> {
     @Override
@@ -339,6 +346,7 @@ class PriorityComparator implements Comparator<Order> {
 
 /**
  * Comparator for Heap class
+ * Compares the Customers in minHeap
  */
 class CustomerComparator implements Comparator<Order> {
 
@@ -353,6 +361,7 @@ class CustomerComparator implements Comparator<Order> {
 
 /**
  * Comparator for Heap class
+ * Compares the OrderIDs in MinHeap
  */
 class IDComparator implements Comparator<Order> {
 
@@ -365,6 +374,10 @@ class IDComparator implements Comparator<Order> {
     }
 }
 
+/**
+ * Employee's specific Order String
+ * Implements the ToString interface
+ */
 class EmployeeOrderStr implements ToString<Order> {
     @Override
     public String toStr(Order t) {

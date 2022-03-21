@@ -46,17 +46,9 @@ password
 Street
 Place
 Boulevard
-sam
-yadav
-email
-password
-
-city
-state
-12345
 Sam
 Yadav
-username
+email1
 password
 
 city
